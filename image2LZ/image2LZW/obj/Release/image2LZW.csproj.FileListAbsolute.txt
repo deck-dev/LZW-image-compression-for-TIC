@@ -1,0 +1,9 @@
+C:\Users\Marco\Desktop\image2LZ\image2LZW\bin\Release\image2LZW.exe.config
+C:\Users\Marco\Desktop\image2LZ\image2LZW\bin\Release\image2LZW.exe
+C:\Users\Marco\Desktop\image2LZ\image2LZW\bin\Release\image2LZW.pdb
+C:\Users\Marco\Desktop\image2LZ\image2LZW\obj\Release\image2LZW.FormMain.resources
+C:\Users\Marco\Desktop\image2LZ\image2LZW\obj\Release\image2LZW.Properties.Resources.resources
+C:\Users\Marco\Desktop\image2LZ\image2LZW\obj\Release\image2LZW.csproj.GenerateResource.Cache
+C:\Users\Marco\Desktop\image2LZ\image2LZW\obj\Release\image2LZW.exe
+C:\Users\Marco\Desktop\image2LZ\image2LZW\obj\Release\image2LZW.pdb
+C:\Users\Marco\Desktop\image2LZ\image2LZW\obj\Release\image2LZW.csprojResolveAssemblyReference.cache
