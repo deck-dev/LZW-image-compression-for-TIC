@@ -7,5 +7,5 @@ lzw_render.tic is a TIC cartridge that contains the decompression function and s
 Thanks to Eldragon, user of Robert Space Industries community to share these amazing pixel art spaceships
 https://robertsspaceindustries.com/community/citizen-spotlight/969-Pixel-Citizen
 
-reference to TIC:
+TIC is a tiny computer where you can make, play and share tiny games. Developed by Vadim Grigoruk
 https://nesbox.itch.io/tic
