@@ -1,4 +1,4 @@
-# LZW-image-compression-for-TIC
+# LZW image compression for TIC
 LZW image compression to load an image directly in the code as a string. Tool created explicitly for TIC projects
 
 Image2LZW is a small application to convert an Image in a compressed string (using LZW algorithm).
