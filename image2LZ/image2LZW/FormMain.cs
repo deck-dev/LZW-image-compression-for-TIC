@@ -41,10 +41,47 @@ namespace LZWConverter
             cbAlpha.Items.Add(new MyComboBoxItem("peppermint", 'F', ImageToLZW.Palette[15]));
             cbAlpha.SelectedIndex = 0;
             cbAlpha.SelectedIndexChanged += cbAlpha_SelectedIndexChanged;
-            tsmFile.DropDownItems.Add(tscbAlpha);
+            toolStrip1.Items.Add(tscbAlpha);
         }
 
-        private void tsmiOpenImage_Click(object sender, EventArgs e)
+
+        private void Img2LZW_LogEvent(object sender, EventArgs e)
+        {
+            // get the state of the process and update the notifications
+            String stat = sender as String;
+            stat = stat != null ? stat : "";
+            UpdateStat(stat);
+        }
+
+        private void UpdateStat(String val)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string>(UpdateStat), new object[] { val });
+                return;
+            }
+            tsslStatus.Text = val;
+            statusStrip1.Refresh();
+        }
+
+        private void sfdImage_FileOk(object sender, CancelEventArgs e)
+        {
+            String fileName = sfdImage.FileName;
+            img2LZW.DecompressedImage.Save(fileName);
+        }
+
+        private void cbAlpha_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // update the alpha color
+            MyComboBoxItem cb = cbAlpha.SelectedItem as MyComboBoxItem;
+            if (cb != null)
+            {
+                String c = cb.Value.ToString();
+                img2LZW.UpdateAlpha(c);
+            }
+        }
+
+        private void tsbOpenImage_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
 
@@ -72,7 +109,8 @@ namespace LZWConverter
                 if (img2LZW.OriginalText.Length < 1000000)
                 {
                     tbOriginal.Text = img2LZW.OriginalText;
-                } else
+                }
+                else
                 {
                     tbOriginal.Text = "Too big to be displayed";
                 }
@@ -85,52 +123,27 @@ namespace LZWConverter
                 statusStrip1.Refresh();
 
                 // enable the image export
-                if(img2LZW.DecompressedImage != null)
+                if (img2LZW.DecompressedImage != null)
                 {
-                    tsmiExportImage.Enabled = true;
+                    tsbExportImage.Enabled = true;
                 }
             }
             dlg.Dispose();
         }
 
-        private void Img2LZW_LogEvent(object sender, EventArgs e)
-        {
-            // get the state of the process and update the notifications
-            String stat = sender as String;
-            stat = stat != null ? stat : "";
-            UpdateStat(stat);
-        }
-
-        private void UpdateStat(String val)
-        {
-            if (InvokeRequired)
-            {
-                this.Invoke(new Action<string>(UpdateStat), new object[] { val });
-                return;
-            }
-            tsslStatus.Text = val;
-            statusStrip1.Refresh();
-        }
-
-        private void tsmiExportImage_Click(object sender, EventArgs e)
+        private void tsbExportImage_Click(object sender, EventArgs e)
         {
             sfdImage.ShowDialog();
         }
 
-        private void sfdImage_FileOk(object sender, CancelEventArgs e)
+        private void tsbCopyToClipboard_Click(object sender, EventArgs e)
         {
-            String fileName = sfdImage.FileName;
-            img2LZW.DecompressedImage.Save(fileName);
-        }
-
-        private void cbAlpha_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // update the alpha color
-            MyComboBoxItem cb = cbAlpha.SelectedItem as MyComboBoxItem;
-            if (cb != null) {
-                String c = cb.Value.ToString();
-                img2LZW.UpdateAlpha(c);
+            try
+            {
+                Clipboard.SetText(tbCompressed.Text);
+                UpdateStat("Exported to clipboard");
             }
+            catch (Exception) { MessageBox.Show("Unable to copy to clipboard"); }
         }
     }
 }
