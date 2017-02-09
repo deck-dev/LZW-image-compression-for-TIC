@@ -84,48 +84,15 @@ namespace LZWConverter
         private void tsbOpenImage_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
-
             dlg.Title = "Open Image";
             dlg.Filter = "image files (*.png;*.bmp;*.gif;*.jpg)|*.png;*.bmp;*.gif;*.jpg";
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                // process LZW
                 img = Image.FromFile(dlg.FileName);
-                img2LZW.Process(img);
-
-                // update panels contents
-                tsslLoadImages.Text = "loading data 1 of 4";
-                statusStrip1.Refresh();
-                pbOriginal.Image = img2LZW.OriginalImage;
-
-                tsslLoadImages.Text = "loading data 2 of 4";
-                statusStrip1.Refresh();
-                pbElaborated.Image = img2LZW.DecompressedImage;
-
-                tsslLoadImages.Text = "loading data 3 of 4";
-                statusStrip1.Refresh();
-                // load the uncompressed string if it is not too big
-                if (img2LZW.OriginalText.Length < 1000000)
+                if (!bwCompress.IsBusy)
                 {
-                    tbOriginal.Text = img2LZW.OriginalText;
-                }
-                else
-                {
-                    tbOriginal.Text = "Too big to be displayed";
-                }
-
-                tsslLoadImages.Text = "loading data 4 of 4";
-                statusStrip1.Refresh();
-                tbCompressed.Text = img2LZW.CompressedText;
-
-                tsslLoadImages.Text = "";
-                statusStrip1.Refresh();
-
-                // enable the image export
-                if (img2LZW.DecompressedImage != null)
-                {
-                    tsbExportImage.Enabled = true;
+                    bwCompress.RunWorkerAsync();
                 }
             }
             dlg.Dispose();
@@ -145,5 +112,69 @@ namespace LZWConverter
             }
             catch (Exception) { MessageBox.Show("Unable to copy to clipboard"); }
         }
+
+        #region BackgroundCompression
+        private void bwCompress_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // process LZW
+            img2LZW.Process(img);
+
+            // update panels contents           
+            bwCompress.ReportProgress(0, new LZWProgress(img2LZW, "loading data 1 of 4"));          
+        }
+
+        private void bwCompress_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            LZWProgress lp = e.UserState as LZWProgress;
+
+
+            pbOriginal.Image = (Bitmap)lp.i2l.OriginalImage;
+            pbElaborated.Image = (Bitmap)lp.i2l.DecompressedImage;
+
+            // load the uncompressed string if it is not too big
+            if (lp.i2l.OriginalText.Length < 1000000)
+            {
+                tbOriginal.Text = lp.i2l.OriginalText;
+                tbOriginal.Refresh();
+            }
+            else
+            {
+                tbOriginal.Text = "Too big to be displayed";
+                tbOriginal.Refresh();
+            }
+
+            tbCompressed.Text = lp.i2l.CompressedText;
+
+            tsslLoadImages.Text = lp.sProgres;
+            statusStrip1.Refresh();
+        }
+
+        private void bwCompress_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            pbOriginal.Image = (Bitmap)img2LZW.OriginalImage;
+            pbElaborated.Image = (Bitmap)img2LZW.DecompressedImage;
+
+            // load the uncompressed string if it is not too big
+            if (img2LZW.OriginalText.Length < 1000000)
+            {
+                tbOriginal.Text = img2LZW.OriginalText;
+                tbOriginal.Refresh();
+            }
+            else
+            {
+                tbOriginal.Text = "Too big to be displayed";
+                tbOriginal.Refresh();
+            }
+            tbCompressed.Text = img2LZW.CompressedText;
+
+            // enable the image export
+            if (img2LZW.DecompressedImage != null)
+            {
+                tsbExportImage.Enabled = true;
+            }
+            tsslLoadImages.Text = "";
+            statusStrip1.Refresh();
+        }
+        #endregion
     }
 }
