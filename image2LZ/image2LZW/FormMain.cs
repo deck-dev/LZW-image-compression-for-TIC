@@ -105,9 +105,14 @@ namespace LZWConverter
 
         private void tsbCopyToClipboard_Click(object sender, EventArgs e)
         {
+            CopyToClipBoard(tbCompressed.Text);
+        }
+
+        private void CopyToClipBoard(string text)
+        {
             try
             {
-                Clipboard.SetText(tbCompressed.Text);
+                Clipboard.SetText(text);
                 UpdateStat("Exported to clipboard");
             }
             catch (Exception) { MessageBox.Show("Unable to copy to clipboard"); }
@@ -118,36 +123,7 @@ namespace LZWConverter
         {
             // process LZW
             img2LZW.Process(img);
-
-            // update panels contents           
-            bwCompress.ReportProgress(0, new LZWProgress(img2LZW, "loading data 1 of 4"));          
-        }
-
-        private void bwCompress_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            LZWProgress lp = e.UserState as LZWProgress;
-
-
-            pbOriginal.Image = (Bitmap)lp.i2l.OriginalImage;
-            pbElaborated.Image = (Bitmap)lp.i2l.DecompressedImage;
-
-            // load the uncompressed string if it is not too big
-            if (lp.i2l.OriginalText.Length < 1000000)
-            {
-                tbOriginal.Text = lp.i2l.OriginalText;
-                tbOriginal.Refresh();
-            }
-            else
-            {
-                tbOriginal.Text = "Too big to be displayed";
-                tbOriginal.Refresh();
-            }
-
-            tbCompressed.Text = lp.i2l.CompressedText;
-
-            tsslLoadImages.Text = lp.sProgres;
-            statusStrip1.Refresh();
-        }
+        }       
 
         private void bwCompress_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -173,8 +149,19 @@ namespace LZWConverter
                 tsbExportImage.Enabled = true;
             }
             tsslLoadImages.Text = "";
+
+            // generate lwz demo
+            rtbDemo.Text = TicCode.lwzdemoPre +
+                String.Format(TicCode.lwzdemoimgData, img2LZW.CompressedText) +
+                TicCode.lwzdemoPost;
+
             statusStrip1.Refresh();
         }
         #endregion
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            CopyToClipBoard(rtbDemo.Text);
+        }
     }
 }

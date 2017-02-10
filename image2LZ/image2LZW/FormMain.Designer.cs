@@ -30,6 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsbOpenImage = new System.Windows.Forms.ToolStripButton();
+            this.tsbExportImage = new System.Windows.Forms.ToolStripButton();
+            this.tsbCopyToClipboard = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pbOriginal = new System.Windows.Forms.PictureBox();
             this.pbElaborated = new System.Windows.Forms.PictureBox();
@@ -43,24 +49,26 @@
             this.tsslStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslLoadImages = new System.Windows.Forms.ToolStripStatusLabel();
             this.sfdImage = new System.Windows.Forms.SaveFileDialog();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.tsbOpenImage = new System.Windows.Forms.ToolStripButton();
-            this.tsbExportImage = new System.Windows.Forms.ToolStripButton();
-            this.tsbCopyToClipboard = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.bwCompress = new System.ComponentModel.BackgroundWorker();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tpImage = new System.Windows.Forms.TabPage();
             this.tabCode = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.rtbDemo = new System.Windows.Forms.RichTextBox();
+            this.tsbCopyToClipboardCode = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.panel1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbOriginal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbElaborated)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tpImage.SuspendLayout();
+            this.tabCode.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.tsbCopyToClipboardCode.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -74,6 +82,63 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1001, 541);
             this.panel1.TabIndex = 0;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsbOpenImage,
+            this.tsbExportImage,
+            this.tsbCopyToClipboard,
+            this.toolStripSeparator1,
+            this.toolStripLabel1});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1001, 27);
+            this.toolStrip1.TabIndex = 2;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // tsbOpenImage
+            // 
+            this.tsbOpenImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbOpenImage.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpenImage.Image")));
+            this.tsbOpenImage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbOpenImage.Name = "tsbOpenImage";
+            this.tsbOpenImage.Size = new System.Drawing.Size(104, 24);
+            this.tsbOpenImage.Text = "Open Image...";
+            this.tsbOpenImage.Click += new System.EventHandler(this.tsbOpenImage_Click);
+            // 
+            // tsbExportImage
+            // 
+            this.tsbExportImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbExportImage.Enabled = false;
+            this.tsbExportImage.Image = ((System.Drawing.Image)(resources.GetObject("tsbExportImage.Image")));
+            this.tsbExportImage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbExportImage.Name = "tsbExportImage";
+            this.tsbExportImage.Size = new System.Drawing.Size(102, 24);
+            this.tsbExportImage.Text = "Export Image";
+            this.tsbExportImage.Click += new System.EventHandler(this.tsbExportImage_Click);
+            // 
+            // tsbCopyToClipboard
+            // 
+            this.tsbCopyToClipboard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbCopyToClipboard.Image = ((System.Drawing.Image)(resources.GetObject("tsbCopyToClipboard.Image")));
+            this.tsbCopyToClipboard.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbCopyToClipboard.Name = "tsbCopyToClipboard";
+            this.tsbCopyToClipboard.Size = new System.Drawing.Size(137, 24);
+            this.tsbCopyToClipboard.Text = "Copy To Clipboard";
+            this.tsbCopyToClipboard.Click += new System.EventHandler(this.tsbCopyToClipboard_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(106, 24);
+            this.toolStripLabel1.Text = "Alpha channel:";
             // 
             // tableLayoutPanel1
             // 
@@ -220,68 +285,9 @@
             this.sfdImage.Filter = "image files (*.png;*.bmp;*.gif;*.jpg)|*.png;*.bmp;*.gif;*.jpg";
             this.sfdImage.FileOk += new System.ComponentModel.CancelEventHandler(this.sfdImage_FileOk);
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbOpenImage,
-            this.tsbExportImage,
-            this.tsbCopyToClipboard,
-            this.toolStripSeparator1,
-            this.toolStripLabel1});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1001, 27);
-            this.toolStrip1.TabIndex = 2;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // tsbOpenImage
-            // 
-            this.tsbOpenImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbOpenImage.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpenImage.Image")));
-            this.tsbOpenImage.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbOpenImage.Name = "tsbOpenImage";
-            this.tsbOpenImage.Size = new System.Drawing.Size(104, 24);
-            this.tsbOpenImage.Text = "Open Image...";
-            this.tsbOpenImage.Click += new System.EventHandler(this.tsbOpenImage_Click);
-            // 
-            // tsbExportImage
-            // 
-            this.tsbExportImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbExportImage.Enabled = false;
-            this.tsbExportImage.Image = ((System.Drawing.Image)(resources.GetObject("tsbExportImage.Image")));
-            this.tsbExportImage.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbExportImage.Name = "tsbExportImage";
-            this.tsbExportImage.Size = new System.Drawing.Size(102, 24);
-            this.tsbExportImage.Text = "Export Image";
-            this.tsbExportImage.Click += new System.EventHandler(this.tsbExportImage_Click);
-            // 
-            // tsbCopyToClipboard
-            // 
-            this.tsbCopyToClipboard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbCopyToClipboard.Image = ((System.Drawing.Image)(resources.GetObject("tsbCopyToClipboard.Image")));
-            this.tsbCopyToClipboard.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbCopyToClipboard.Name = "tsbCopyToClipboard";
-            this.tsbCopyToClipboard.Size = new System.Drawing.Size(137, 24);
-            this.tsbCopyToClipboard.Text = "Copy To Clipboard";
-            this.tsbCopyToClipboard.Click += new System.EventHandler(this.tsbCopyToClipboard_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(106, 24);
-            this.toolStripLabel1.Text = "Alpha channel:";
-            // 
             // bwCompress
             // 
-            this.bwCompress.WorkerReportsProgress = true;
             this.bwCompress.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwCompress_DoWork);
-            this.bwCompress.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bwCompress_ProgressChanged);
             this.bwCompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwCompress_RunWorkerCompleted);
             // 
             // tabControl
@@ -308,6 +314,7 @@
             // 
             // tabCode
             // 
+            this.tabCode.Controls.Add(this.panel2);
             this.tabCode.Location = new System.Drawing.Point(4, 25);
             this.tabCode.Name = "tabCode";
             this.tabCode.Padding = new System.Windows.Forms.Padding(3);
@@ -315,6 +322,53 @@
             this.tabCode.TabIndex = 1;
             this.tabCode.Text = "Code";
             this.tabCode.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.rtbDemo);
+            this.panel2.Controls.Add(this.tsbCopyToClipboardCode);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(3, 3);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1001, 541);
+            this.panel2.TabIndex = 1;
+            // 
+            // rtbDemo
+            // 
+            this.rtbDemo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbDemo.Location = new System.Drawing.Point(0, 27);
+            this.rtbDemo.Name = "rtbDemo";
+            this.rtbDemo.Size = new System.Drawing.Size(1001, 514);
+            this.rtbDemo.TabIndex = 4;
+            this.rtbDemo.Text = "";
+            this.rtbDemo.WordWrap = false;
+            // 
+            // tsbCopyToClipboardCode
+            // 
+            this.tsbCopyToClipboardCode.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.tsbCopyToClipboardCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton3,
+            this.toolStripSeparator2});
+            this.tsbCopyToClipboardCode.Location = new System.Drawing.Point(0, 0);
+            this.tsbCopyToClipboardCode.Name = "tsbCopyToClipboardCode";
+            this.tsbCopyToClipboardCode.Size = new System.Drawing.Size(1001, 27);
+            this.tsbCopyToClipboardCode.TabIndex = 3;
+            this.tsbCopyToClipboardCode.Text = "toolStrip2";
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(137, 24);
+            this.toolStripButton3.Text = "Copy To Clipboard";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
             // 
             // FormMain
             // 
@@ -329,16 +383,21 @@
             this.Text = "Image to LZW";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbOriginal)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbElaborated)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.tpImage.ResumeLayout(false);
+            this.tabCode.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.tsbCopyToClipboardCode.ResumeLayout(false);
+            this.tsbCopyToClipboardCode.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -369,6 +428,11 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tpImage;
         private System.Windows.Forms.TabPage tabCode;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.ToolStrip tsbCopyToClipboardCode;
+        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.RichTextBox rtbDemo;
     }
 }
 

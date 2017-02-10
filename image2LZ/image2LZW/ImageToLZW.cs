@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text;
 
 namespace LZWConverter
 {
@@ -75,7 +76,7 @@ namespace LZWConverter
             OriginalImage = new Bitmap(img);
             Bitmap convertedImg = new Bitmap(img);
 
-            // convert image accordly to tic palette
+            // convert image accordly to tic palette            
             for (int i = 0; i < convertedImg.Width * convertedImg.Height; i++)
             {
                 int x = i % convertedImg.Width;
@@ -84,23 +85,23 @@ namespace LZWConverter
                 int percentage = (int)(100f * i / (convertedImg.Width * convertedImg.Height));
 
                 // notify process
-                if(i % 1000 == 0) Log("convert to palette... "+ percentage + " %");
+                if (i % 1000 == 0) Log("convert to palette... " + percentage + " %");
             }
 
             // convert image to text
             OriginalText = "";
-            String buffer ="";
+            StringBuilder buffer = new StringBuilder(10000);
             for (int i = 0; i < convertedImg.Width * convertedImg.Height; i++)
             {
                 int x = i % convertedImg.Width;
                 int y = i / convertedImg.Width;
-                buffer += ColorToString(convertedImg.GetPixel(x, y));
+                buffer.Append(ColorToString(convertedImg.GetPixel(x, y)));
 
                 // need to break the text in blocks otherwise the process run slowly
-                if(i % 1000 == 0)
+                if (i % 1000 == 0)
                 {
                     OriginalText += buffer;
-                    buffer = "";
+                    buffer = new StringBuilder(10000);
                 }
 
                 // notify process
@@ -156,7 +157,7 @@ namespace LZWConverter
 
         private void Log(String txt)
         {
-            if(LogEvent != null)
+            if (LogEvent != null)
             {
                 LogEvent(txt, EventArgs.Empty);
             }
@@ -185,7 +186,7 @@ namespace LZWConverter
             dict[15] = "F";
 
             // process lzw
-            String output = "";
+            StringBuilder output = new StringBuilder(txt.Length * 10);
             char ch = ' ';
             String s = "";
 
@@ -199,7 +200,7 @@ namespace LZWConverter
                 }
                 else
                 {
-                    output += String.Format(FORMAT, FindString(dict, s));
+                    output.AppendFormat(FORMAT, FindString(dict, s));
                     dict[++indxDict] = s + ch;
                     s = "" + ch;
                 }
@@ -207,8 +208,8 @@ namespace LZWConverter
                 if (indxDict >= DICT_SIZE - 2)
                 {
                     // flush dictionary
-                    output += String.Format(FORMAT, FindString(dict, s));
-                    output += String.Format(FORMAT, DICT_SIZE - 1);
+                    output.AppendFormat(FORMAT, FindString(dict, s));
+                    output.AppendFormat(FORMAT, DICT_SIZE - 1);
                     s = "";
                     indxDict = 15;
                     for (int j = 16; j < dict.Length; j++) dict[j] = null;
@@ -218,9 +219,9 @@ namespace LZWConverter
                 int percentage = (int)(100f * i / txt.Length);
                 if (i % 1000 == 0) Log("compress data... " + percentage + " %");
             }
-            output += String.Format(FORMAT, FindString(dict, s));
+            output.AppendFormat(FORMAT, FindString(dict, s));
 
-            return output;
+            return output.ToString();
         }
 
         private String LZWDecompress(String code)
@@ -250,13 +251,13 @@ namespace LZWConverter
 
             // decompress data
             int indxCode = 6; // first 6 chars are width and height of image
-            String output = "";
+            StringBuilder output = new StringBuilder(code.Length * 10);
             int prevCode = -1;
             int currCode = -1;
 
             prevCode = Convert.ToInt32(code.Substring(indxCode, FORMAT_SIZE), 16);
             indxCode += FORMAT_SIZE;
-            output += dict[prevCode];
+            output.Append(dict[prevCode]);
             while (indxCode < code.Length)
             {
                 currCode = Convert.ToInt32(code.Substring(indxCode, FORMAT_SIZE), 16);
@@ -268,18 +269,18 @@ namespace LZWConverter
                     for (int j = 16; j < dict.Length; j++) dict[j] = null;
                     prevCode = Convert.ToInt32(code.Substring(indxCode, FORMAT_SIZE), 16);
                     indxCode += FORMAT_SIZE;
-                    output += dict[prevCode];
+                    output.Append(dict[prevCode]);
                 }
                 else if (dict[currCode] != null)
                 {
-                    output += dict[currCode];
+                    output.Append(dict[currCode]);
                     dict[++indxDict] = dict[prevCode] + dict[currCode][0];
                     prevCode = currCode;
                 }
                 else
                 {
                     dict[++indxDict] = dict[prevCode] + dict[prevCode][0];
-                    output += dict[currCode];
+                    output.Append(dict[currCode]);
                     prevCode = currCode;
                 }
 
@@ -287,7 +288,7 @@ namespace LZWConverter
                 int percentage = (int)(100f * indxCode / code.Length);
                 if (indxCode % 1000 == 0) Log("decompress data... " + percentage + " %");
             }
-            return output;
+            return output.ToString();
         }
 
         private int FindString(String[] dict, String txt)
@@ -331,9 +332,9 @@ namespace LZWConverter
 
         private String ColorToString(Color c)
         {
-            for(int i = 0; i < Palette.Length; i++)
+            for (int i = 0; i < Palette.Length; i++)
             {
-                if(c==Palette[i])
+                if (c == Palette[i])
                 {
                     return String.Format("{0:X1}", i);
                 }
@@ -343,7 +344,7 @@ namespace LZWConverter
 
         private Color StringToColor(String c)
         {
-            switch(c)
+            switch (c)
             {
                 case "0":
                     return Palette[0];
