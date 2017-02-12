@@ -6,3 +6,12 @@ C:\Users\Marco\Desktop\image2LZ\image2LZW\obj\Debug\image2LZW.pdb
 C:\Users\Marco\Desktop\image2LZ\image2LZW\bin\Debug\image2LZW.exe.config
 C:\Users\Marco\Desktop\image2LZ\image2LZW\bin\Debug\image2LZW.exe
 C:\Users\Marco\Desktop\image2LZ\image2LZW\bin\Debug\image2LZW.pdb
+E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\bin\Debug\image2LZW.exe.config
+E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\obj\Debug\image2LZW.exe
+E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\obj\Debug\image2LZW.pdb
+E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\bin\Debug\image2LZW.exe
+E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\bin\Debug\image2LZW.pdb
+E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\obj\Debug\LZWConverter.FormMain.resources
+E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\obj\Debug\image2LZW.Properties.Resources.resources
+E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\obj\Debug\LZWConverter.csproj.GenerateResource.Cache
+E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\obj\Debug\LZWConverter.csprojResolveAssemblyReference.cache

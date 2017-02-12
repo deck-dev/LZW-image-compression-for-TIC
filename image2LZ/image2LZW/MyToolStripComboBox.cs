@@ -25,13 +25,16 @@ namespace LZWConverter
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
-            base.OnDrawItem(e);
-            e.DrawBackground();
-            MyComboBoxItem item = (MyComboBoxItem)this.Items[e.Index];
-            Brush brush = new SolidBrush(item.BackColor);
-            e.Graphics.FillRectangle(brush, e.Bounds);
-            Brush fontBrush = item.BackColor.GetBrightness() > 0.5f ? Brushes.Black : Brushes.White;
-            e.Graphics.DrawString(item.Text, this.Font, fontBrush, e.Bounds.X, e.Bounds.Y);
+                base.OnDrawItem(e);
+                e.DrawBackground();
+            if (e.Index >= 0)
+            {
+                MyComboBoxItem item = (MyComboBoxItem)this.Items[e.Index];
+                Brush brush = new SolidBrush(item.BackColor);
+                e.Graphics.FillRectangle(brush, e.Bounds);
+                Brush fontBrush = item.BackColor.GetBrightness() > 0.5f ? Brushes.Black : Brushes.White;
+                e.Graphics.DrawString(item.Text, this.Font, fontBrush, e.Bounds.X, e.Bounds.Y);
+            }
         }
     }
 

@@ -8,28 +8,16 @@ namespace LZWConverter
     {
         private const int DICT_SIZE = 0xFFF + 1;  // number of F determines format size
         private const int FORMAT_SIZE = 3;  // change here accordly to dictionary size
-        private const String FORMAT = "{0:X3}";  // change here accordly to dictionary size
+        private const String FORMAT = "{0:x3}";  // change here accordly to dictionary size
 
         // alpha color
         private Color alpha;
 
-        // TIC palette (DB16)
-        private Color black = Color.FromArgb(20, 12, 18);
-        private Color plum = Color.FromArgb(68, 36, 52);
-        private Color midnight = Color.FromArgb(48, 52, 109);
-        private Color iron = Color.FromArgb(78, 74, 78);
-        private Color earth = Color.FromArgb(133, 76, 48);
-        private Color moss = Color.FromArgb(52, 101, 36);
-        private Color berry = Color.FromArgb(208, 70, 72);
-        private Color olive = Color.FromArgb(117, 113, 97);
-        private Color cornflower = Color.FromArgb(89, 125, 206);
-        private Color ocher = Color.FromArgb(210, 125, 44);
-        private Color slate = Color.FromArgb(133, 149, 161);
-        private Color leaf = Color.FromArgb(109, 170, 44);
-        private Color peach = Color.FromArgb(210, 170, 153);
-        private Color sky = Color.FromArgb(109, 194, 202);
-        private Color maize = Color.FromArgb(218, 212, 94);
-        private Color peppermint = Color.FromArgb(222, 238, 214);
+        // image dimensions
+        private int w;
+        private int h;
+
+        private Bitmap convertedImg;
 
         public Bitmap OriginalImage { get; set; }
         public Bitmap DecompressedImage { get; set; }
@@ -40,32 +28,33 @@ namespace LZWConverter
         public delegate void LogEventHandler(object sender, EventArgs e);
         public event LogEventHandler LogEvent;
 
-        public static Color[] Palette { get; private set; }
+        public Palette Palette { get; set; }
 
         public ImageToLZW()
         {
             // init palette array
-            Palette = new Color[] {
-                black,
-                plum,
-                midnight,
-                iron,
-                earth,
-                moss,
-                berry,
-                olive,
-                cornflower,
-                ocher,
-                slate,
-                leaf,
-                peach,
-                sky,
-                maize,
-                peppermint
+            Palette = new Palette("TIC");
+            Palette.Colors = new Color[] {
+                Color.FromArgb(20, 12, 18),
+                Color.FromArgb(68, 36, 52),
+                Color.FromArgb(48, 52, 109),
+                Color.FromArgb(78, 74, 78),
+                Color.FromArgb(133, 76, 48),
+                Color.FromArgb(52, 101, 36),
+                Color.FromArgb(208, 70, 72),
+                Color.FromArgb(117, 113, 97),
+                Color.FromArgb(89, 125, 206),
+                Color.FromArgb(210, 125, 44),
+                Color.FromArgb(133, 149, 161),
+                Color.FromArgb(109, 170, 44),
+                Color.FromArgb(210, 170, 153),
+                Color.FromArgb(109, 194, 202),
+                Color.FromArgb(218, 212, 94),
+                Color.FromArgb(222, 238, 214)
             };
 
             // init alpha color
-            alpha = black;
+            alpha = Palette.Colors[0];
         }
 
         public void Process(Image img)
@@ -74,19 +63,10 @@ namespace LZWConverter
             // create image
             Log("start");
             OriginalImage = new Bitmap(img);
-            Bitmap convertedImg = new Bitmap(img);
+            convertedImg = new Bitmap(img);
 
             // convert image accordly to tic palette            
-            for (int i = 0; i < convertedImg.Width * convertedImg.Height; i++)
-            {
-                int x = i % convertedImg.Width;
-                int y = i / convertedImg.Width;
-                convertedImg.SetPixel(x, y, ConverToPalette(convertedImg.GetPixel(x, y)));
-                int percentage = (int)(100f * i / (convertedImg.Width * convertedImg.Height));
-
-                // notify process
-                if (i % 1000 == 0) Log("convert to palette... " + percentage + " %");
-            }
+            AdaptToPalette();
 
             // convert image to text
             OriginalText = "";
@@ -98,7 +78,7 @@ namespace LZWConverter
                 buffer.Append(ColorToString(convertedImg.GetPixel(x, y)));
 
                 // need to break the text in blocks otherwise the process run slowly
-                if (i % 1000 == 0)
+                if (i % 10000 == 0)
                 {
                     OriginalText += buffer;
                     buffer = new StringBuilder(10000);
@@ -126,13 +106,42 @@ namespace LZWConverter
             // DECOMPRESSION
             // decompress from code to image
             //first data is width and height of the image, 3 digits
-            int w = Convert.ToInt32(CompressedText.Substring(0, 3), 16);
-            int h = Convert.ToInt32(CompressedText.Substring(3, 3), 16);
+            w = Convert.ToInt32(CompressedText.Substring(0, 3), 16);
+            h = Convert.ToInt32(CompressedText.Substring(3, 3), 16);
 
             String decompress = LZWDecompress(CompressedText);
             #endregion
 
             #region reconstruct image
+            // render the image from decompressed data
+            RenderDecompressedImage();
+            #endregion
+
+            // notify process
+            Log("end - compression ratio: " + (int)(100 - 1f * CompressedText.Length / OriginalText.Length * 100) + " %, size " + CompressedText.Length + " chars ");
+        }
+
+        public void UpdateAlpha(String c)
+        {
+            alpha = StringToColor(c);
+        }
+
+        public void AdaptToPalette()
+        {
+            for (int i = 0; i < convertedImg.Width * convertedImg.Height; i++)
+            {
+                int x = i % convertedImg.Width;
+                int y = i / convertedImg.Width;
+                convertedImg.SetPixel(x, y, ConverToPalette(convertedImg.GetPixel(x, y)));
+
+                // notify process
+                int percentage = (int)(100f * i / (convertedImg.Width * convertedImg.Height));
+                if (i % 1000 == 0) Log("convert to palette... " + percentage + " %");
+            }
+        }
+
+        public void RenderDecompressedImage()
+        {
             DecompressedImage = new Bitmap(w, h);
             for (int i = 0; i < DecompressedImage.Width * DecompressedImage.Height; i++)
             {
@@ -144,15 +153,6 @@ namespace LZWConverter
                 int percentage = (int)(100f * i / (DecompressedImage.Width * DecompressedImage.Height));
                 if (i % 1000 == 0) Log("reconstruct image... " + percentage + " %");
             }
-            #endregion
-
-            // notify process
-            Log("end - compression ratio: " + (int)(100 - 1f * CompressedText.Length / OriginalText.Length * 100) + " %, size " + CompressedText.Length + " chars ");
-        }
-
-        public void UpdateAlpha(String c)
-        {
-            alpha = StringToColor(c);
         }
 
         private void Log(String txt)
@@ -178,12 +178,12 @@ namespace LZWConverter
             dict[7] = "7";
             dict[8] = "8";
             dict[9] = "9";
-            dict[10] = "A";
-            dict[11] = "B";
-            dict[12] = "C";
-            dict[13] = "D";
-            dict[14] = "E";
-            dict[15] = "F";
+            dict[10] = "a";
+            dict[11] = "b";
+            dict[12] = "c";
+            dict[13] = "d";
+            dict[14] = "e";
+            dict[15] = "f";
 
             // process lzw
             StringBuilder output = new StringBuilder(txt.Length * 10);
@@ -242,12 +242,12 @@ namespace LZWConverter
             dict[7] = "7";
             dict[8] = "8";
             dict[9] = "9";
-            dict[10] = "A";
-            dict[11] = "B";
-            dict[12] = "C";
-            dict[13] = "D";
-            dict[14] = "E";
-            dict[15] = "F";
+            dict[10] = "a";
+            dict[11] = "b";
+            dict[12] = "c";
+            dict[13] = "d";
+            dict[14] = "e";
+            dict[15] = "f";
 
             // decompress data
             int indxCode = 6; // first 6 chars are width and height of image
@@ -307,19 +307,19 @@ namespace LZWConverter
         {
             int minIndx = 0;
             double minDst = double.MaxValue;
-            for (int i = 0; i < Palette.Length; i++)
+            for (int i = 0; i < Palette.Colors.Length; i++)
             {
                 if (c.A != 255)
                 {
                     return alpha;
                 }
-                else if (ColorDst(c, Palette[i]) < minDst)
+                else if (ColorDst(c, Palette.Colors[i]) < minDst)
                 {
-                    minDst = ColorDst(c, Palette[i]);
+                    minDst = ColorDst(c, Palette.Colors[i]);
                     minIndx = i;
                 }
             }
-            return Palette[minIndx];
+            return Palette.Colors[minIndx];
         }
 
         private double ColorDst(Color a, Color b)
@@ -332,11 +332,11 @@ namespace LZWConverter
 
         private String ColorToString(Color c)
         {
-            for (int i = 0; i < Palette.Length; i++)
+            for (int i = 0; i < Palette.Colors.Length; i++)
             {
-                if (c == Palette[i])
+                if (c == Palette.Colors[i])
                 {
-                    return String.Format("{0:X1}", i);
+                    return String.Format("{0:x1}", i);
                 }
             }
             return "0";
@@ -347,39 +347,39 @@ namespace LZWConverter
             switch (c)
             {
                 case "0":
-                    return Palette[0];
+                    return Palette.Colors[0];
                 case "1":
-                    return Palette[1];
+                    return Palette.Colors[1];
                 case "2":
-                    return Palette[2];
+                    return Palette.Colors[2];
                 case "3":
-                    return Palette[3];
+                    return Palette.Colors[3];
                 case "4":
-                    return Palette[4];
+                    return Palette.Colors[4];
                 case "5":
-                    return Palette[5];
+                    return Palette.Colors[5];
                 case "6":
-                    return Palette[6];
+                    return Palette.Colors[6];
                 case "7":
-                    return Palette[7];
+                    return Palette.Colors[7];
                 case "8":
-                    return Palette[8];
+                    return Palette.Colors[8];
                 case "9":
-                    return Palette[9];
-                case "A":
-                    return Palette[10];
-                case "B":
-                    return Palette[11];
-                case "C":
-                    return Palette[12];
-                case "D":
-                    return Palette[13];
-                case "E":
-                    return Palette[14];
-                case "F":
-                    return Palette[15];
+                    return Palette.Colors[9];
+                case "a":
+                    return Palette.Colors[10];
+                case "b":
+                    return Palette.Colors[11];
+                case "c":
+                    return Palette.Colors[12];
+                case "d":
+                    return Palette.Colors[13];
+                case "e":
+                    return Palette.Colors[14];
+                case "f":
+                    return Palette.Colors[15];
                 default:
-                    return Palette[0];
+                    return Palette.Colors[0];
             }
         }
     }
