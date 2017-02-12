@@ -122,7 +122,7 @@ function TIC()
 	-- update image
 	RenderImage(x,y,w,h,14)
 	
-	-- navigate trough the image
+	-- navigate through the image
 	if btn(0) then y=y-5 end
 	if btn(1) then y=y+5 end
 	if btn(2) then x=x-5 end
