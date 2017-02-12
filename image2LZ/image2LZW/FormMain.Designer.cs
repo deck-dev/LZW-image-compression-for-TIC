@@ -30,6 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsbOpenImage = new System.Windows.Forms.ToolStripButton();
+            this.tsbExportImage = new System.Windows.Forms.ToolStripButton();
+            this.tsbCopyToClipboard = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pbOriginal = new System.Windows.Forms.PictureBox();
             this.pbElaborated = new System.Windows.Forms.PictureBox();
@@ -43,175 +49,39 @@
             this.tsslStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslLoadImages = new System.Windows.Forms.ToolStripStatusLabel();
             this.sfdImage = new System.Windows.Forms.SaveFileDialog();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.tsbOpenImage = new System.Windows.Forms.ToolStripButton();
-            this.tsbExportImage = new System.Windows.Forms.ToolStripButton();
-            this.tsbCopyToClipboard = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.bwCompress = new System.ComponentModel.BackgroundWorker();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tpImage = new System.Windows.Forms.TabPage();
+            this.tabCode = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.rtbDemo = new System.Windows.Forms.RichTextBox();
+            this.tsbCopyToClipboardCode = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.panel1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbOriginal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbElaborated)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.tabControl.SuspendLayout();
+            this.tpImage.SuspendLayout();
+            this.tabCode.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.tsbCopyToClipboardCode.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.toolStrip1);
             this.panel1.Controls.Add(this.tableLayoutPanel1);
             this.panel1.Controls.Add(this.statusStrip1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1015, 576);
+            this.panel1.Size = new System.Drawing.Size(1001, 541);
             this.panel1.TabIndex = 0;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.pbOriginal, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.pbElaborated, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.tbOriginal, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.tbCompressed, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 1, 2);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1015, 551);
-            this.tableLayoutPanel1.TabIndex = 1;
-            // 
-            // pbOriginal
-            // 
-            this.pbOriginal.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pbOriginal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbOriginal.Location = new System.Drawing.Point(4, 29);
-            this.pbOriginal.Margin = new System.Windows.Forms.Padding(4);
-            this.pbOriginal.Name = "pbOriginal";
-            this.pbOriginal.Size = new System.Drawing.Size(499, 392);
-            this.pbOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbOriginal.TabIndex = 0;
-            this.pbOriginal.TabStop = false;
-            // 
-            // pbElaborated
-            // 
-            this.pbElaborated.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pbElaborated.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbElaborated.Location = new System.Drawing.Point(511, 29);
-            this.pbElaborated.Margin = new System.Windows.Forms.Padding(4);
-            this.pbElaborated.Name = "pbElaborated";
-            this.pbElaborated.Size = new System.Drawing.Size(500, 392);
-            this.pbElaborated.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbElaborated.TabIndex = 1;
-            this.pbElaborated.TabStop = false;
-            // 
-            // tbOriginal
-            // 
-            this.tbOriginal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbOriginal.Location = new System.Drawing.Point(4, 454);
-            this.tbOriginal.Margin = new System.Windows.Forms.Padding(4);
-            this.tbOriginal.Multiline = true;
-            this.tbOriginal.Name = "tbOriginal";
-            this.tbOriginal.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbOriginal.Size = new System.Drawing.Size(499, 93);
-            this.tbOriginal.TabIndex = 2;
-            // 
-            // tbCompressed
-            // 
-            this.tbCompressed.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbCompressed.Location = new System.Drawing.Point(511, 454);
-            this.tbCompressed.Margin = new System.Windows.Forms.Padding(4);
-            this.tbCompressed.Multiline = true;
-            this.tbCompressed.Name = "tbCompressed";
-            this.tbCompressed.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbCompressed.Size = new System.Drawing.Size(500, 93);
-            this.tbCompressed.TabIndex = 3;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(4, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(499, 25);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Original Image";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(511, 0);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(500, 25);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Reconstructed Image";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(4, 425);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(499, 25);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Uncompressed data";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(511, 425);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(119, 17);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Compressed data";
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsslStatus,
-            this.tsslLoadImages});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 551);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1015, 25);
-            this.statusStrip1.TabIndex = 0;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // tsslStatus
-            // 
-            this.tsslStatus.Name = "tsslStatus";
-            this.tsslStatus.Size = new System.Drawing.Size(21, 20);
-            this.tsslStatus.Text = "\"\"";
-            // 
-            // tsslLoadImages
-            // 
-            this.tsslLoadImages.Name = "tsslLoadImages";
-            this.tsslLoadImages.Size = new System.Drawing.Size(0, 20);
-            // 
-            // sfdImage
-            // 
-            this.sfdImage.DefaultExt = "png";
-            this.sfdImage.FileName = "export.png";
-            this.sfdImage.Filter = "image files (*.png;*.bmp;*.gif;*.jpg)|*.png;*.bmp;*.gif;*.jpg";
-            this.sfdImage.FileOk += new System.ComponentModel.CancelEventHandler(this.sfdImage_FileOk);
             // 
             // toolStrip1
             // 
@@ -224,7 +94,7 @@
             this.toolStripLabel1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1015, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(1001, 27);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -270,13 +140,242 @@
             this.toolStripLabel1.Size = new System.Drawing.Size(106, 24);
             this.toolStripLabel1.Text = "Alpha channel:";
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.pbOriginal, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.pbElaborated, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tbOriginal, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.tbCompressed, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 1, 2);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1001, 516);
+            this.tableLayoutPanel1.TabIndex = 1;
+            // 
+            // pbOriginal
+            // 
+            this.pbOriginal.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.pbOriginal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pbOriginal.Location = new System.Drawing.Point(4, 29);
+            this.pbOriginal.Margin = new System.Windows.Forms.Padding(4);
+            this.pbOriginal.Name = "pbOriginal";
+            this.pbOriginal.Size = new System.Drawing.Size(492, 364);
+            this.pbOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbOriginal.TabIndex = 0;
+            this.pbOriginal.TabStop = false;
+            // 
+            // pbElaborated
+            // 
+            this.pbElaborated.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.pbElaborated.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pbElaborated.Location = new System.Drawing.Point(504, 29);
+            this.pbElaborated.Margin = new System.Windows.Forms.Padding(4);
+            this.pbElaborated.Name = "pbElaborated";
+            this.pbElaborated.Size = new System.Drawing.Size(493, 364);
+            this.pbElaborated.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbElaborated.TabIndex = 1;
+            this.pbElaborated.TabStop = false;
+            // 
+            // tbOriginal
+            // 
+            this.tbOriginal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbOriginal.Location = new System.Drawing.Point(4, 426);
+            this.tbOriginal.Margin = new System.Windows.Forms.Padding(4);
+            this.tbOriginal.Multiline = true;
+            this.tbOriginal.Name = "tbOriginal";
+            this.tbOriginal.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbOriginal.Size = new System.Drawing.Size(492, 86);
+            this.tbOriginal.TabIndex = 2;
+            // 
+            // tbCompressed
+            // 
+            this.tbCompressed.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbCompressed.Location = new System.Drawing.Point(504, 426);
+            this.tbCompressed.Margin = new System.Windows.Forms.Padding(4);
+            this.tbCompressed.Multiline = true;
+            this.tbCompressed.Name = "tbCompressed";
+            this.tbCompressed.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbCompressed.Size = new System.Drawing.Size(493, 86);
+            this.tbCompressed.TabIndex = 3;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(4, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(492, 25);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Original Image";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Location = new System.Drawing.Point(504, 0);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(493, 25);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Reconstructed Image";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Location = new System.Drawing.Point(4, 397);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(492, 25);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Uncompressed data";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(504, 397);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(119, 17);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Compressed data";
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslStatus,
+            this.tsslLoadImages});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 516);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(1001, 25);
+            this.statusStrip1.TabIndex = 0;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // tsslStatus
+            // 
+            this.tsslStatus.Name = "tsslStatus";
+            this.tsslStatus.Size = new System.Drawing.Size(21, 20);
+            this.tsslStatus.Text = "\"\"";
+            // 
+            // tsslLoadImages
+            // 
+            this.tsslLoadImages.Name = "tsslLoadImages";
+            this.tsslLoadImages.Size = new System.Drawing.Size(0, 20);
+            // 
+            // sfdImage
+            // 
+            this.sfdImage.DefaultExt = "png";
+            this.sfdImage.FileName = "export.png";
+            this.sfdImage.Filter = "image files (*.png;*.bmp;*.gif;*.jpg)|*.png;*.bmp;*.gif;*.jpg";
+            this.sfdImage.FileOk += new System.ComponentModel.CancelEventHandler(this.sfdImage_FileOk);
+            // 
+            // bwCompress
+            // 
+            this.bwCompress.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwCompress_DoWork);
+            this.bwCompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwCompress_RunWorkerCompleted);
+            // 
+            // tabControl
+            // 
+            this.tabControl.Controls.Add(this.tpImage);
+            this.tabControl.Controls.Add(this.tabCode);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(1015, 576);
+            this.tabControl.TabIndex = 3;
+            // 
+            // tpImage
+            // 
+            this.tpImage.Controls.Add(this.panel1);
+            this.tpImage.Location = new System.Drawing.Point(4, 25);
+            this.tpImage.Name = "tpImage";
+            this.tpImage.Padding = new System.Windows.Forms.Padding(3);
+            this.tpImage.Size = new System.Drawing.Size(1007, 547);
+            this.tpImage.TabIndex = 0;
+            this.tpImage.Text = "Image";
+            this.tpImage.UseVisualStyleBackColor = true;
+            // 
+            // tabCode
+            // 
+            this.tabCode.Controls.Add(this.panel2);
+            this.tabCode.Location = new System.Drawing.Point(4, 25);
+            this.tabCode.Name = "tabCode";
+            this.tabCode.Padding = new System.Windows.Forms.Padding(3);
+            this.tabCode.Size = new System.Drawing.Size(1007, 547);
+            this.tabCode.TabIndex = 1;
+            this.tabCode.Text = "Code";
+            this.tabCode.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.rtbDemo);
+            this.panel2.Controls.Add(this.tsbCopyToClipboardCode);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(3, 3);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1001, 541);
+            this.panel2.TabIndex = 1;
+            // 
+            // rtbDemo
+            // 
+            this.rtbDemo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbDemo.Location = new System.Drawing.Point(0, 27);
+            this.rtbDemo.Name = "rtbDemo";
+            this.rtbDemo.Size = new System.Drawing.Size(1001, 514);
+            this.rtbDemo.TabIndex = 4;
+            this.rtbDemo.Text = "";
+            this.rtbDemo.WordWrap = false;
+            // 
+            // tsbCopyToClipboardCode
+            // 
+            this.tsbCopyToClipboardCode.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.tsbCopyToClipboardCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton3,
+            this.toolStripSeparator2});
+            this.tsbCopyToClipboardCode.Location = new System.Drawing.Point(0, 0);
+            this.tsbCopyToClipboardCode.Name = "tsbCopyToClipboardCode";
+            this.tsbCopyToClipboardCode.Size = new System.Drawing.Size(1001, 27);
+            this.tsbCopyToClipboardCode.TabIndex = 3;
+            this.tsbCopyToClipboardCode.Text = "toolStrip2";
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(137, 24);
+            this.toolStripButton3.Text = "Copy To Clipboard";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1015, 576);
-            this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.tabControl);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
@@ -284,16 +383,22 @@
             this.Text = "Image to LZW";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbOriginal)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbElaborated)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.tabControl.ResumeLayout(false);
+            this.tpImage.ResumeLayout(false);
+            this.tabCode.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.tsbCopyToClipboardCode.ResumeLayout(false);
+            this.tsbCopyToClipboardCode.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -319,6 +424,15 @@
         private System.Windows.Forms.ToolStripButton tsbCopyToClipboard;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.ComponentModel.BackgroundWorker bwCompress;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tpImage;
+        private System.Windows.Forms.TabPage tabCode;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.ToolStrip tsbCopyToClipboardCode;
+        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.RichTextBox rtbDemo;
     }
 }
 

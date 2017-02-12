@@ -84,48 +84,15 @@ namespace LZWConverter
         private void tsbOpenImage_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
-
             dlg.Title = "Open Image";
             dlg.Filter = "image files (*.png;*.bmp;*.gif;*.jpg)|*.png;*.bmp;*.gif;*.jpg";
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                // process LZW
                 img = Image.FromFile(dlg.FileName);
-                img2LZW.Process(img);
-
-                // update panels contents
-                tsslLoadImages.Text = "loading data 1 of 4";
-                statusStrip1.Refresh();
-                pbOriginal.Image = img2LZW.OriginalImage;
-
-                tsslLoadImages.Text = "loading data 2 of 4";
-                statusStrip1.Refresh();
-                pbElaborated.Image = img2LZW.DecompressedImage;
-
-                tsslLoadImages.Text = "loading data 3 of 4";
-                statusStrip1.Refresh();
-                // load the uncompressed string if it is not too big
-                if (img2LZW.OriginalText.Length < 1000000)
+                if (!bwCompress.IsBusy)
                 {
-                    tbOriginal.Text = img2LZW.OriginalText;
-                }
-                else
-                {
-                    tbOriginal.Text = "Too big to be displayed";
-                }
-
-                tsslLoadImages.Text = "loading data 4 of 4";
-                statusStrip1.Refresh();
-                tbCompressed.Text = img2LZW.CompressedText;
-
-                tsslLoadImages.Text = "";
-                statusStrip1.Refresh();
-
-                // enable the image export
-                if (img2LZW.DecompressedImage != null)
-                {
-                    tsbExportImage.Enabled = true;
+                    bwCompress.RunWorkerAsync();
                 }
             }
             dlg.Dispose();
@@ -138,12 +105,63 @@ namespace LZWConverter
 
         private void tsbCopyToClipboard_Click(object sender, EventArgs e)
         {
+            CopyToClipBoard(tbCompressed.Text);
+        }
+
+        private void CopyToClipBoard(string text)
+        {
             try
             {
-                Clipboard.SetText(tbCompressed.Text);
+                Clipboard.SetText(text);
                 UpdateStat("Exported to clipboard");
             }
             catch (Exception) { MessageBox.Show("Unable to copy to clipboard"); }
+        }
+
+        #region BackgroundCompression
+        private void bwCompress_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // process LZW
+            img2LZW.Process(img);
+        }       
+
+        private void bwCompress_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            pbOriginal.Image = (Bitmap)img2LZW.OriginalImage;
+            pbElaborated.Image = (Bitmap)img2LZW.DecompressedImage;
+
+            // load the uncompressed string if it is not too big
+            if (img2LZW.OriginalText.Length < 1000000)
+            {
+                tbOriginal.Text = img2LZW.OriginalText;
+                tbOriginal.Refresh();
+            }
+            else
+            {
+                tbOriginal.Text = "Too big to be displayed";
+                tbOriginal.Refresh();
+            }
+            tbCompressed.Text = img2LZW.CompressedText;
+
+            // enable the image export
+            if (img2LZW.DecompressedImage != null)
+            {
+                tsbExportImage.Enabled = true;
+            }
+            tsslLoadImages.Text = "";
+
+            // generate lwz demo
+            rtbDemo.Text = TicCode.lwzdemoPre +
+                String.Format(TicCode.lwzdemoimgData, img2LZW.CompressedText) +
+                TicCode.lwzdemoPost;
+
+            statusStrip1.Refresh();
+        }
+        #endregion
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            CopyToClipBoard(rtbDemo.Text);
         }
     }
 }
