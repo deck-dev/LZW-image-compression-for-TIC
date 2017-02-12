@@ -15,3 +15,12 @@ E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\obj\Debug\L
 E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\obj\Debug\image2LZW.Properties.Resources.resources
 E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\obj\Debug\LZWConverter.csproj.GenerateResource.Cache
 E:\GIT repositories\LZW-image-compression-for-TIC\image2LZ\image2LZW\obj\Debug\LZWConverter.csprojResolveAssemblyReference.cache
+E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\bin\Debug\image2LZW.exe.config
+E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Debug\image2LZW.exe
+E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Debug\image2LZW.pdb
+E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\bin\Debug\image2LZW.exe
+E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\bin\Debug\image2LZW.pdb
+E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Debug\LZWConverter.csprojResolveAssemblyReference.cache
+E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Debug\LZWConverter.FormMain.resources
+E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Debug\image2LZW.Properties.Resources.resources
+E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Debug\LZWConverter.csproj.GenerateResource.Cache

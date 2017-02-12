@@ -28,7 +28,6 @@ E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Releas
 E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Release\image2LZW.pdb
 E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\bin\Release\image2LZW.exe
 E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\bin\Release\image2LZW.pdb
-E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Release\LZWConverter.csprojResolveAssemblyReference.cache
 E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Release\LZWConverter.FormMain.resources
 E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Release\image2LZW.Properties.Resources.resources
 E:\GIT repositories\LZW-image-compression-for-TIC\Image2LZW\image2LZW\obj\Release\LZWConverter.csproj.GenerateResource.Cache

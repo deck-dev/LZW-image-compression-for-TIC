@@ -85,9 +85,10 @@ end
 
         #region compressed image
         public static string lwzdemoimgData = @"
-------------------------------------------------------
---EXAMPLE
+-- example
 
+-- compressed image data
+-- here is cut for a better visualization, copy from the compressed data to get entire image
 local comprImg = '{0}'
 ";
         #endregion
@@ -102,17 +103,17 @@ local x=0
 local y=0
 
 local function RenderImage(xofs,yofs,w,h,alpha)
-		-- take the portion of the image starting by xofs, yofs that fits the screen
-		-- w, h are the whole dimensions of the image
-		for y=0,136 do -- screen height
-			for x=0,240 do -- screen width
-				if xofs+x>=0 and yofs+y>=0 and xofs+x<w and yofs+y<h then
-					local ofs=(yofs+y)*w+(xofs+x)+1
-					local n=img[ofs]
-					if n~=alpha then pix(x,y,n) end
-				end
+	-- take the portion of the image starting by xofs, yofs that fits the screen
+	-- w, h are the whole dimensions of the image
+	for y=0,136 do -- screen height
+		for x=0,240 do -- screen width
+			if xofs+x>=0 and yofs+y>=0 and xofs+x<w and yofs+y<h then
+				local ofs=(yofs+y)*w+(xofs+x)+1
+				local n=img[ofs]
+				if n~=alpha then pix(x,y,n) end
 			end
 		end
+	end
 end
 
 function TIC()

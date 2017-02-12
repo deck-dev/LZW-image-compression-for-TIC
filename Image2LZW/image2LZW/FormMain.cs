@@ -170,7 +170,7 @@ namespace LZWConverter
             UpdateStat(stat);
         }
 
-        #region BackgroundCompression
+        #region background compression / decompression
         private void bwCompress_DoWork(object sender, DoWorkEventArgs e)
         {
             // process LZW
@@ -206,10 +206,19 @@ namespace LZWConverter
             // generate LZW demo for tic
             string imgString = img2LZW.CompressedText;
             sourceCode = TicCode.lwzdemoPre + String.Format(TicCode.lwzdemoimgData, imgString) + TicCode.lwzdemoPost;
-            rtbDemo.Text = sourceCode;
 
-            // adapt width to length of decompressed data
-            rtbDemo.RightMargin = (int)(TextRenderer.MeasureText(imgString, rtbDemo.Font).Width * 1.3);
+            // cut the data string for a better visualization
+            string imgCompressText = "";
+            if(imgString.Length > 50)
+            {
+                string compressedString = imgString.Substring(0, 10) + " ... " + imgString.Substring(imgString.Length - 10, 10);
+                imgCompressText = String.Format(TicCode.lwzdemoimgData, compressedString);
+            } else
+            {
+                imgCompressText = String.Format(TicCode.lwzdemoimgData, imgString);
+            }
+
+            rtbDemo.Text = TicCode.lwzdemoPre + imgCompressText + TicCode.lwzdemoPost; ;
 
             // update rendering of rich text box
             RenderSampleCode();
@@ -271,7 +280,7 @@ namespace LZWConverter
         private void tsbCopyCodeExample_Click(object sender, EventArgs e)
         {
             // copy data
-            CopyToClipBoard(rtbDemo.Text);
+            CopyToClipBoard(sourceCode);
         }
 
         private void tscbPalettes_SelectedIndexChanged(object sender, EventArgs e)
