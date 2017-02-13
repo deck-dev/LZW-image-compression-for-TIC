@@ -8,8 +8,6 @@ namespace LZWConverter
 {
     class TicConfigParser
     {
-        // TODO: parse the tic config to get the setted palettes
-        // the selected palette is the one which is used to render the compressed image
         private string filePath;
 
         public List<Palette> Palettes { get; set; }
@@ -30,7 +28,7 @@ namespace LZWConverter
                 // is a variable, maybe a palette, save name
                 if (lines[i].Contains("local"))
                 {
-                    // if we have two rows with 8 datas, it will be a palette
+                    // if we have two rows with 8 datas, it should be a palette
                     if (lines[i+1].Split(new string[] { ".." }, StringSplitOptions.RemoveEmptyEntries).Length == 8 &&
                         lines[i+2].Split(new string[] { ".." }, StringSplitOptions.RemoveEmptyEntries).Length == 8)
                     {

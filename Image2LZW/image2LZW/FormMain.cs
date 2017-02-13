@@ -66,12 +66,12 @@ namespace LZWConverter
             cbAlpha.Items.Add(new MyComboBoxItem("7", '7', img2LZW.Palette.Colors[7]));
             cbAlpha.Items.Add(new MyComboBoxItem("8", '8', img2LZW.Palette.Colors[8]));
             cbAlpha.Items.Add(new MyComboBoxItem("9", '9', img2LZW.Palette.Colors[9]));
-            cbAlpha.Items.Add(new MyComboBoxItem("10", 'A', img2LZW.Palette.Colors[10]));
-            cbAlpha.Items.Add(new MyComboBoxItem("11", 'B', img2LZW.Palette.Colors[11]));
-            cbAlpha.Items.Add(new MyComboBoxItem("12", 'C', img2LZW.Palette.Colors[12]));
-            cbAlpha.Items.Add(new MyComboBoxItem("13", 'D', img2LZW.Palette.Colors[13]));
-            cbAlpha.Items.Add(new MyComboBoxItem("14", 'E', img2LZW.Palette.Colors[14]));
-            cbAlpha.Items.Add(new MyComboBoxItem("15", 'F', img2LZW.Palette.Colors[15]));
+            cbAlpha.Items.Add(new MyComboBoxItem("10", 'a', img2LZW.Palette.Colors[10]));
+            cbAlpha.Items.Add(new MyComboBoxItem("11", 'b', img2LZW.Palette.Colors[11]));
+            cbAlpha.Items.Add(new MyComboBoxItem("12", 'c', img2LZW.Palette.Colors[12]));
+            cbAlpha.Items.Add(new MyComboBoxItem("13", 'd', img2LZW.Palette.Colors[13]));
+            cbAlpha.Items.Add(new MyComboBoxItem("14", 'e', img2LZW.Palette.Colors[14]));
+            cbAlpha.Items.Add(new MyComboBoxItem("15", 'f', img2LZW.Palette.Colors[15]));
 
             cbAlpha.SelectedIndex = 0;
         }

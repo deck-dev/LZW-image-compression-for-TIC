@@ -22,12 +22,7 @@ namespace LZWConverter
 
         public override string ToString()
         {
-            string col = "";
-            foreach(Color c in Colors)
-            {
-                col += c.Name + " \n";
-            }
-            return Name;    // + " \n" + col;
+            return Name;
         }
     }
 }
