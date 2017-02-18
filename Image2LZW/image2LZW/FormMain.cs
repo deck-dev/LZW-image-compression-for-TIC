@@ -49,7 +49,8 @@ namespace LZWConverter
             }
             catch
             {
-                MessageBox.Show("Can't find the config.lua");
+                // MessageBox.Show("Can't find the config.lua");
+                UpdateStat("Can't find the config.lua");
             }
         }
 
@@ -87,68 +88,45 @@ namespace LZWConverter
             statusStrip1.Refresh();
         }
 
-        private void CheckKeyword(string word, Color color, int startIndex)
+        private void HighlightKeyword()
         {
-            // highlights some part of the generated lua code
-            word = word + " ";
-            if (rtbDemo.Text.Contains(word))
+            // these are the reserved strings of lua
+            String keywords = "\\b(and|break|do|else|elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\\b";
+
+            Regex regExp = new Regex(keywords);
+
+            foreach (Match match in regExp.Matches(rtbDemo.Text))
             {
-                int index = -1;
-                int selectStart = rtbDemo.SelectionStart;
+                rtbDemo.Select(match.Index, match.Length);
+                rtbDemo.SelectionFont = new Font(rtbDemo.Font, FontStyle.Bold);
+                rtbDemo.SelectionColor = keywordsColor;
+            }
+        }
 
-                // keywords
-                while ((index = rtbDemo.Text.IndexOf(word, (index + 1))) != -1)
+        private void HighlightComments()
+        {
+            for (int i = 0; i < rtbDemo.Lines.Length; i++)
+            {
+                String line = rtbDemo.Lines[i];
+                int indx = line.IndexOf("--");
+                if (indx >= 0)
                 {
-                    rtbDemo.Select((index + startIndex), word.Length);
-                    rtbDemo.SelectionFont = new Font(rtbDemo.Font, FontStyle.Bold);
-                    rtbDemo.SelectionColor = color;
-                    rtbDemo.Select(selectStart, 0);
+                    rtbDemo.Select(rtbDemo.GetFirstCharIndexFromLine(i) + indx, line.Length - indx);
+                    rtbDemo.SelectionFont = new Font(rtbDemo.Font, FontStyle.Italic);
+                    rtbDemo.SelectionColor = commentsColor;
+                    rtbDemo.Select(rtbDemo.GetFirstCharIndexFromLine(i) + indx, 0);
                     rtbDemo.SelectionFont = new Font(rtbDemo.Font, FontStyle.Regular);
-                    rtbDemo.SelectionColor = Color.White;
-                }
-
-                // comments
-                for (int i = 0; i < rtbDemo.Lines.Length; i++)
-                {
-                    String line = rtbDemo.Lines[i];
-                    int indx = line.IndexOf("--");
-                    if (indx >= 0)
-                    {
-                        rtbDemo.Select(rtbDemo.GetFirstCharIndexFromLine(i) + indx, line.Length - indx);
-                        rtbDemo.SelectionFont = new Font(rtbDemo.Font, FontStyle.Italic);
-                        rtbDemo.SelectionColor = commentsColor;
-                        rtbDemo.Select(rtbDemo.GetFirstCharIndexFromLine(i) + indx, 0);
-                        rtbDemo.SelectionFont = new Font(rtbDemo.Font, FontStyle.Regular);
-                        rtbDemo.SelectionColor = Color.Black;
-                    }
+                    rtbDemo.SelectionColor = Color.Black;
                 }
             }
         }
 
-        private void RenderSampleCode()
+        private void HighlightSampleCode()
         {
-            // these are the reserved keyword of lua
-            CheckKeyword("and", keywordsColor, 0);
-            CheckKeyword("break", keywordsColor, 0);
-            CheckKeyword("do", keywordsColor, 0);
-            CheckKeyword("else", keywordsColor, 0);
-            CheckKeyword("elseif", keywordsColor, 0);
-            CheckKeyword("end", keywordsColor, 0);
-            CheckKeyword("false", keywordsColor, 0);
-            CheckKeyword("for", keywordsColor, 0);
-            CheckKeyword("function", keywordsColor, 0);
-            CheckKeyword("if", keywordsColor, 0);
-            CheckKeyword("in", keywordsColor, 0);
-            CheckKeyword("local", keywordsColor, 0);
-            CheckKeyword("nil", keywordsColor, 0);
-            CheckKeyword("not", keywordsColor, 0);
-            CheckKeyword("or", keywordsColor, 0);
-            CheckKeyword("repeat", keywordsColor, 0);
-            CheckKeyword("return", keywordsColor, 0);
-            CheckKeyword("then", keywordsColor, 0);
-            CheckKeyword("true", keywordsColor, 0);
-            CheckKeyword("until", keywordsColor, 0);
-            CheckKeyword("while", keywordsColor, 0);
+            // highlights the reserved keywords of lua
+            HighlightKeyword();
+            // comments
+            HighlightComments();
         }
 
         private void CopyToClipBoard(string text)
@@ -209,19 +187,17 @@ namespace LZWConverter
 
             // cut the data string for a better visualization
             string imgCompressText = "";
-            if(imgString.Length > 50)
+            if (imgString.Length > 50)
             {
                 string compressedString = imgString.Substring(0, 10) + " ... " + imgString.Substring(imgString.Length - 10, 10);
                 imgCompressText = String.Format(TicCode.lwzdemoimgData, compressedString);
-            } else
+            }
+            else
             {
                 imgCompressText = String.Format(TicCode.lwzdemoimgData, imgString);
             }
 
             rtbDemo.Text = TicCode.lwzdemoPre + imgCompressText + TicCode.lwzdemoPost; ;
-
-            // update rendering of rich text box
-            RenderSampleCode();
 
             // update status
             statusStrip1.Refresh();
@@ -300,5 +276,11 @@ namespace LZWConverter
             }
         }
         #endregion
+
+        private void rtbDemo_Layout(object sender, LayoutEventArgs e)
+        {
+            // update rendering of rich text box
+            HighlightSampleCode();
+        }
     }
 }

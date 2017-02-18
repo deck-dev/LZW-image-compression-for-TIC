@@ -380,6 +380,7 @@
             this.rtbDemo.TabIndex = 4;
             this.rtbDemo.Text = "";
             this.rtbDemo.WordWrap = false;
+            this.rtbDemo.Layout += new System.Windows.Forms.LayoutEventHandler(this.rtbDemo_Layout);
             // 
             // tsbCopyToClipboardCode
             // 
