@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Text;
+using System.Threading;
 
 namespace LZWConverter
 {
@@ -21,6 +23,8 @@ namespace LZWConverter
 
         public Bitmap OriginalImage { get; set; }
         public Bitmap DecompressedImage { get; set; }
+
+        LockBmp lockConverted;
 
         public String OriginalText { get; set; }
         public String CompressedText { get; set; }
@@ -57,36 +61,43 @@ namespace LZWConverter
             alpha = Palette.Colors[0];
         }
 
-        public void Process(Image img)
+        public unsafe void Process(Image img)
         {
             #region adapt image palette and convert to text
             // create image
             Log("start");
-            OriginalImage = new Bitmap(img);
             convertedImg = new Bitmap(img);
+            OriginalImage = new Bitmap(img);
+
+            lockConverted = new LockBmp((Bitmap)convertedImg);
+            lockConverted.LockBits();
 
             // convert image accordly to tic palette            
             AdaptToPalette();
 
             // convert image to text
             OriginalText = "";
-            StringBuilder buffer = new StringBuilder(10000);
-            for (int i = 0; i < convertedImg.Width * convertedImg.Height; i++)
+            StringBuilder buffer = new StringBuilder(1000);
+
+            for (int i = 0; i < lockConverted.Width * lockConverted.Height; i++)
             {
-                int x = i % convertedImg.Width;
-                int y = i / convertedImg.Width;
-                buffer.Append(ColorToString(convertedImg.GetPixel(x, y)));
+                int x = i % lockConverted.Width;
+                int y = i / lockConverted.Width;
+                buffer.Append(ColorToString(lockConverted.GetPixel(x, y)));
 
                 // need to break the text in blocks otherwise the process run slowly
-                if (i % 10000 == 0)
+                if (i % 1000 == 0)
                 {
                     OriginalText += buffer;
-                    buffer = new StringBuilder(10000);
+                    buffer = new StringBuilder(1000);
                 }
 
-                // notify process
-                int percentage = (int)(100f * i / (convertedImg.Width * convertedImg.Height));
-                if (i % 10000 == 0) Log("transform image to data... " + percentage + " %");
+                // notify process               
+                if (i % 1000 == 0)
+                {
+                    int percentage = (int)(100f * i / (lockConverted.Width * lockConverted.Height));
+                    Log("transform image to data... " + percentage + " %");
+                }
             }
             OriginalText += buffer;
             #endregion
@@ -95,8 +106,8 @@ namespace LZWConverter
             // COMPRESSION
             //first data is width and height of the image, 3 digits
             CompressedText = "";
-            CompressedText += String.Format(FORMAT, convertedImg.Width);
-            CompressedText += String.Format(FORMAT, convertedImg.Height);
+            CompressedText += String.Format(FORMAT, lockConverted.Width);
+            CompressedText += String.Format(FORMAT, lockConverted.Height);
 
             // compress image and convert in char array
             CompressedText += LZWCompress(OriginalText);
@@ -115,6 +126,9 @@ namespace LZWConverter
             #region reconstruct image
             // render the image from decompressed data
             RenderDecompressedImage();
+
+            //Unlock
+            lockConverted.UnlockBits();
             #endregion
 
             // notify process
@@ -128,15 +142,18 @@ namespace LZWConverter
 
         public void AdaptToPalette()
         {
-            for (int i = 0; i < convertedImg.Width * convertedImg.Height; i++)
+            for (int i = 0; i < lockConverted.Width * lockConverted.Height; i++)
             {
-                int x = i % convertedImg.Width;
-                int y = i / convertedImg.Width;
-                convertedImg.SetPixel(x, y, ConverToPalette(convertedImg.GetPixel(x, y)));
+                int x = i % lockConverted.Width;
+                int y = i / lockConverted.Width;
+                lockConverted.SetPixel(x, y, ConverToPalette(lockConverted.GetPixel(x, y)));
 
-                // notify process
-                int percentage = (int)(100f * i / (convertedImg.Width * convertedImg.Height));
-                if (i % 1000 == 0) Log("convert to palette... " + percentage + " %");
+                // notify process                
+                if (i % 1000 == 0)
+                {
+                    int percentage = (int)(100f * i / (lockConverted.Width * lockConverted.Height));
+                    Log("convert to palette... " + percentage + " %");
+                }
             }
         }
 
@@ -145,13 +162,16 @@ namespace LZWConverter
             DecompressedImage = new Bitmap(w, h);
             for (int i = 0; i < DecompressedImage.Width * DecompressedImage.Height; i++)
             {
-                int x = i % convertedImg.Width;
-                int y = i / convertedImg.Width;
+                int x = i % lockConverted.Width;
+                int y = i / lockConverted.Width;
                 DecompressedImage.SetPixel(x, y, StringToColor(OriginalText[i].ToString()));
 
-                // notify process
-                int percentage = (int)(100f * i / (DecompressedImage.Width * DecompressedImage.Height));
-                if (i % 1000 == 0) Log("reconstruct image... " + percentage + " %");
+                // notify process               
+                if (i % 1000 == 0)
+                {
+                    int percentage = (int)(100f * i / (DecompressedImage.Width * DecompressedImage.Height));
+                    Log("reconstruct image... " + percentage + " %");
+                }
             }
         }
 
@@ -216,8 +236,11 @@ namespace LZWConverter
                 }
 
                 // notify process
-                int percentage = (int)(100f * i / txt.Length);
-                if (i % 1000 == 0) Log("compress data... " + percentage + " %");
+                if (i % 1000 == 0)
+                {
+                    int percentage = (int)(100f * i / txt.Length);
+                    Log("compress data... " + percentage + " %");
+                }
             }
             output.AppendFormat(FORMAT, FindString(dict, s));
 
@@ -284,9 +307,12 @@ namespace LZWConverter
                     prevCode = currCode;
                 }
 
-                // notify process
-                int percentage = (int)(100f * indxCode / code.Length);
-                if (indxCode % 1000 == 0) Log("decompress data... " + percentage + " %");
+                // notify process                
+                if (indxCode % 1000 == 0)
+                {
+                    int percentage = (int)(100f * indxCode / code.Length);
+                    Log("decompress data... " + percentage + " %");
+                }
             }
             return output.ToString();
         }
@@ -295,7 +321,9 @@ namespace LZWConverter
         {
             for (int i = 0; i < dict.Length; i++)
             {
-                if (dict[i] != null && dict[i].Equals(txt))
+                if (dict[i] == null) { return -1; }
+
+                if (dict[i].Equals(txt))
                 {
                     return i;
                 }
@@ -307,16 +335,21 @@ namespace LZWConverter
         {
             int minIndx = 0;
             double minDst = double.MaxValue;
+            double distance;
             for (int i = 0; i < Palette.Colors.Length; i++)
             {
                 if (c.A != 255)
                 {
                     return alpha;
                 }
-                else if (ColorDst(c, Palette.Colors[i]) < minDst)
+                else
                 {
-                    minDst = ColorDst(c, Palette.Colors[i]);
-                    minIndx = i;
+                    distance = ColorDst(c, Palette.Colors[i]);
+                    if (distance < minDst)
+                    {
+                        minDst = distance;
+                        minIndx = i;
+                    }
                 }
             }
             return Palette.Colors[minIndx];
@@ -324,10 +357,10 @@ namespace LZWConverter
 
         private double ColorDst(Color a, Color b)
         {
-            int dr = Math.Abs(a.R - b.R);
-            int dg = Math.Abs(a.G - b.G);
-            int db = Math.Abs(a.B - b.B);
-            return Math.Sqrt(dr * dr + dg * dg + db * db);
+            int dr = (a.R - b.R);
+            int dg = (a.G - b.G);
+            int db = (a.B - b.B);
+            return (dr * dr + dg * dg + db * db);
         }
 
         private String ColorToString(Color c)
