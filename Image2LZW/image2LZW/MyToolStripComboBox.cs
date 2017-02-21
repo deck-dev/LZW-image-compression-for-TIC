@@ -20,13 +20,13 @@ namespace LZWConverter
     {
         public MyComboBox()
         {
-            this.DrawMode = DrawMode.OwnerDrawFixed;
+            DrawMode = DrawMode.OwnerDrawFixed;
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
-                base.OnDrawItem(e);
-                e.DrawBackground();
+            base.OnDrawItem(e);
+            e.DrawBackground();
             if (e.Index >= 0)
             {
                 MyComboBoxItem item = (MyComboBoxItem)this.Items[e.Index];
@@ -44,17 +44,14 @@ namespace LZWConverter
         public object Value { get; set; }
         public Color BackColor { get; set; }
 
-        public MyComboBoxItem() { }
-
-        public MyComboBoxItem(string pText, object pValue)
+        public MyComboBoxItem(string text, object value, Color color)
         {
-            Text = pText; Value = pValue;
+            Text = text;
+            Value = value;
+            BackColor = color;
         }
 
-        public MyComboBoxItem(string pText, object pValue, Color pColor)
-        {
-            Text = pText; Value = pValue; BackColor = pColor;
-        }
+        public MyComboBoxItem() : this("", 0, Color.Black) { }
 
         public override string ToString()
         {

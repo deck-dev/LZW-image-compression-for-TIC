@@ -197,7 +197,8 @@ namespace LZWConverter
                 imgCompressText = String.Format(TicCode.lwzdemoimgData, imgString);
             }
 
-            rtbDemo.Text = TicCode.lwzdemoPre + imgCompressText + TicCode.lwzdemoPost; ;
+            // load sample in the view
+            rtbDemo.Text = TicCode.lwzdemoPre + imgCompressText + TicCode.lwzdemoPost;
 
             // update status
             statusStrip1.Refresh();
@@ -275,12 +276,12 @@ namespace LZWConverter
                 }
             }
         }
-        #endregion
 
         private void rtbDemo_Layout(object sender, LayoutEventArgs e)
         {
             // update rendering of rich text box
             HighlightSampleCode();
         }
+        #endregion
     }
 }
