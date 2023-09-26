@@ -154,6 +154,7 @@ namespace LZWConverter
 
             // Load sample in the view
             rtbDemo.Text = TicCode.lwzdemoPre + imgCompressText + TicCode.lwzdemoPost;
+            UpdateTextColors();
 
             // Update status
             statusStrip1.Refresh();
@@ -233,7 +234,7 @@ namespace LZWConverter
             }
         }
 
-        private void RtbDemo_Layout(object sender, LayoutEventArgs e)
+        private void UpdateTextColors()
         {
             // Scan the code to detect tokens
             var scanner = new LuaScanner();

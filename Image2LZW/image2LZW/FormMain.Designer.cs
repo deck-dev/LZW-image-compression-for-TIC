@@ -126,7 +126,7 @@
             this.tsbExportImage.Image = ((System.Drawing.Image)(resources.GetObject("tsbExportImage.Image")));
             this.tsbExportImage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbExportImage.Name = "tsbExportImage";
-            this.tsbExportImage.Size = new System.Drawing.Size(80, 22);
+            this.tsbExportImage.Size = new System.Drawing.Size(81, 22);
             this.tsbExportImage.Text = "Export Image";
             this.tsbExportImage.Click += new System.EventHandler(this.TsbExportImage_Click);
             // 
@@ -380,7 +380,6 @@
             this.rtbDemo.TabIndex = 4;
             this.rtbDemo.Text = "";
             this.rtbDemo.WordWrap = false;
-            this.rtbDemo.Layout += new System.Windows.Forms.LayoutEventHandler(this.RtbDemo_Layout);
             // 
             // tsbCopyToClipboardCode
             // 
