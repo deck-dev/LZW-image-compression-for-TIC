@@ -63,6 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LockBmp.cs" />
+    <Compile Include="Scanner\LuaScanner.cs" />
+    <Compile Include="Scanner\LuaToken.cs" />
     <Compile Include="Palette.cs" />
     <Compile Include="MyToolStripComboBox.cs">
       <SubType>Component</SubType>

@@ -33,7 +33,7 @@ namespace LZWConverter
                 Brush brush = new SolidBrush(item.BackColor);
                 e.Graphics.FillRectangle(brush, e.Bounds);
                 Brush fontBrush = item.BackColor.GetBrightness() > 0.5f ? Brushes.Black : Brushes.White;
-                e.Graphics.DrawString(item.Text, this.Font, fontBrush, e.Bounds.X, e.Bounds.Y);
+                e.Graphics.DrawString(item.Text, Font, fontBrush, e.Bounds.X, e.Bounds.Y);
             }
         }
     }

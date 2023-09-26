@@ -112,7 +112,7 @@
             this.tsbOpenImage.Name = "tsbOpenImage";
             this.tsbOpenImage.Size = new System.Drawing.Size(85, 22);
             this.tsbOpenImage.Text = "Open Image...";
-            this.tsbOpenImage.Click += new System.EventHandler(this.tsbOpenImage_Click);
+            this.tsbOpenImage.Click += new System.EventHandler(this.TsbOpenImage_Click);
             // 
             // toolStripSeparator3
             // 
@@ -128,7 +128,7 @@
             this.tsbExportImage.Name = "tsbExportImage";
             this.tsbExportImage.Size = new System.Drawing.Size(80, 22);
             this.tsbExportImage.Text = "Export Image";
-            this.tsbExportImage.Click += new System.EventHandler(this.tsbExportImage_Click);
+            this.tsbExportImage.Click += new System.EventHandler(this.TsbExportImage_Click);
             // 
             // toolStripSeparator4
             // 
@@ -147,7 +147,7 @@
             this.tscbPalettes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.tscbPalettes.Name = "tscbPalettes";
             this.tscbPalettes.Size = new System.Drawing.Size(121, 25);
-            this.tscbPalettes.SelectedIndexChanged += new System.EventHandler(this.tscbPalettes_SelectedIndexChanged);
+            this.tscbPalettes.SelectedIndexChanged += new System.EventHandler(this.TscbPalettes_SelectedIndexChanged);
             // 
             // toolStripSeparator5
             // 
@@ -282,7 +282,7 @@
             this.btnCopy.TabIndex = 8;
             this.btnCopy.Text = "Copy";
             this.btnCopy.UseVisualStyleBackColor = true;
-            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
+            this.btnCopy.Click += new System.EventHandler(this.BtnCopy_Click);
             // 
             // statusStrip1
             // 
@@ -312,12 +312,12 @@
             this.sfdImage.DefaultExt = "png";
             this.sfdImage.FileName = "export.png";
             this.sfdImage.Filter = "image files (*.png;*.bmp;*.gif;*.jpg)|*.png;*.bmp;*.gif;*.jpg";
-            this.sfdImage.FileOk += new System.ComponentModel.CancelEventHandler(this.sfdImage_FileOk);
+            this.sfdImage.FileOk += new System.ComponentModel.CancelEventHandler(this.SfdImage_FileOk);
             // 
             // bwCompress
             // 
-            this.bwCompress.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwCompress_DoWork);
-            this.bwCompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwCompress_RunWorkerCompleted);
+            this.bwCompress.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BwCompress_DoWork);
+            this.bwCompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BwCompress_RunWorkerCompleted);
             // 
             // tabControl
             // 
@@ -380,7 +380,7 @@
             this.rtbDemo.TabIndex = 4;
             this.rtbDemo.Text = "";
             this.rtbDemo.WordWrap = false;
-            this.rtbDemo.Layout += new System.Windows.Forms.LayoutEventHandler(this.rtbDemo_Layout);
+            this.rtbDemo.Layout += new System.Windows.Forms.LayoutEventHandler(this.RtbDemo_Layout);
             // 
             // tsbCopyToClipboardCode
             // 
@@ -401,7 +401,7 @@
             this.tsbCopyCodeExample.Name = "tsbCopyCodeExample";
             this.tsbCopyCodeExample.Size = new System.Drawing.Size(39, 22);
             this.tsbCopyCodeExample.Text = "Copy";
-            this.tsbCopyCodeExample.Click += new System.EventHandler(this.tsbCopyCodeExample_Click);
+            this.tsbCopyCodeExample.Click += new System.EventHandler(this.TsbCopyCodeExample_Click);
             // 
             // toolStripSeparator2
             // 

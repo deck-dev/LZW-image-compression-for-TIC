@@ -1,157 +1,153 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Text;
-using System.Threading;
 
 namespace LZWConverter
 {
     public class ImageToLZW
     {
-        private const int DICT_SIZE = 0xFFF + 1;  // number of F determines format size
-        private const int FORMAT_SIZE = 3;  // change here accordly to dictionary size
-        private const String FORMAT = "{0:x3}";  // change here accordly to dictionary size
-
-        // alpha color
-        private Color alpha;
-
-        // image dimensions
-        private int w;
-        private int h;
-
-        private Bitmap convertedImg;
+        private const int DICT_SIZE = 0xFFF + 1;  // Number of Fs determines format size
+        private const int FORMAT_SIZE = 3;  // Change here accordly to dictionary size
+        private const string FORMAT = "{0:x3}";  // Change here accordly to dictionary size
 
         public Bitmap OriginalImage { get; set; }
         public Bitmap DecompressedImage { get; set; }
-
-        LockBmp lockConverted;
-
-        public String OriginalText { get; set; }
-        public String CompressedText { get; set; }
-
+        public string OriginalText { get; set; }
+        public string CompressedText { get; set; }
         public delegate void LogEventHandler(object sender, EventArgs e);
         public event LogEventHandler LogEvent;
-
         public Palette Palette { get; set; }
+
+        // Alpha color
+        private Color _alpha;
+
+        // Image dimensions
+        private int _width;
+        private int _height;
+        private string _decompressedText;
+
+        private Bitmap _convertedImg;
+        private LockBmp _lockConverted;
 
         public ImageToLZW()
         {
-            // init palette array
-            Palette = new Palette("TIC");
-            Palette.Colors = new Color[] {
-                Color.FromArgb(20, 12, 18),
-                Color.FromArgb(68, 36, 52),
-                Color.FromArgb(48, 52, 109),
-                Color.FromArgb(78, 74, 78),
-                Color.FromArgb(133, 76, 48),
-                Color.FromArgb(52, 101, 36),
-                Color.FromArgb(208, 70, 72),
-                Color.FromArgb(117, 113, 97),
-                Color.FromArgb(89, 125, 206),
-                Color.FromArgb(210, 125, 44),
-                Color.FromArgb(133, 149, 161),
-                Color.FromArgb(109, 170, 44),
-                Color.FromArgb(210, 170, 153),
-                Color.FromArgb(109, 194, 202),
-                Color.FromArgb(218, 212, 94),
-                Color.FromArgb(222, 238, 214)
+            // Init palette array
+            Palette = new Palette("TIC")
+            {
+                Colors = new Color[] {
+                    Color.FromArgb(20, 12, 18),
+                    Color.FromArgb(68, 36, 52),
+                    Color.FromArgb(48, 52, 109),
+                    Color.FromArgb(78, 74, 78),
+                    Color.FromArgb(133, 76, 48),
+                    Color.FromArgb(52, 101, 36),
+                    Color.FromArgb(208, 70, 72),
+                    Color.FromArgb(117, 113, 97),
+                    Color.FromArgb(89, 125, 206),
+                    Color.FromArgb(210, 125, 44),
+                    Color.FromArgb(133, 149, 161),
+                    Color.FromArgb(109, 170, 44),
+                    Color.FromArgb(210, 170, 153),
+                    Color.FromArgb(109, 194, 202),
+                    Color.FromArgb(218, 212, 94),
+                    Color.FromArgb(222, 238, 214)
+                }
             };
 
-            // init alpha color
-            alpha = Palette.Colors[0];
+            // Init alpha color
+            _alpha = Palette.Colors[0];
         }
 
         public unsafe void Process(Image img)
         {
-            #region adapt image palette and convert to text
-            // create image
+            #region Adapt image palette and convert to text
+            // Create image
             Log("start");
-            convertedImg = new Bitmap(img);
+            _convertedImg = new Bitmap(img);
             OriginalImage = new Bitmap(img);
 
-            lockConverted = new LockBmp((Bitmap)convertedImg);
-            lockConverted.LockBits();
+            _lockConverted = new LockBmp((Bitmap)_convertedImg);
+            _lockConverted.LockBits();
 
-            // convert image accordly to tic palette            
+            // Convert image accordly to tic palette            
             AdaptToPalette();
 
-            // convert image to text
+            // Convert image to text
             OriginalText = "";
             StringBuilder buffer = new StringBuilder(1000);
 
-            for (int i = 0; i < lockConverted.Width * lockConverted.Height; i++)
+            for (int i = 0; i < _lockConverted.Width * _lockConverted.Height; i++)
             {
-                int x = i % lockConverted.Width;
-                int y = i / lockConverted.Width;
-                buffer.Append(ColorToString(lockConverted.GetPixel(x, y)));
+                int x = i % _lockConverted.Width;
+                int y = i / _lockConverted.Width;
+                buffer.Append(ColorTostring(_lockConverted.GetPixel(x, y)));
 
-                // need to break the text in blocks otherwise the process run slowly
+                // Need to break the text in blocks otherwise the process run slowly
                 if (i % 1000 == 0)
                 {
                     OriginalText += buffer;
                     buffer = new StringBuilder(1000);
                 }
 
-                // notify process               
+                // Notify process               
                 if (i % 1000 == 0)
                 {
-                    int percentage = (int)(100f * i / (lockConverted.Width * lockConverted.Height));
+                    int percentage = (int)(100f * i / (_lockConverted.Width * _lockConverted.Height));
                     Log("transform image to data... " + percentage + " %");
                 }
             }
             OriginalText += buffer;
             #endregion
 
-            #region compression
+            #region Compression
             // COMPRESSION
-            //first data is width and height of the image, 3 digits
+            // First data is width and height of the image, 3 digits
             CompressedText = "";
-            CompressedText += String.Format(FORMAT, lockConverted.Width);
-            CompressedText += String.Format(FORMAT, lockConverted.Height);
+            CompressedText += string.Format(FORMAT, _lockConverted.Width);
+            CompressedText += string.Format(FORMAT, _lockConverted.Height);
 
-            // compress image and convert in char array
+            // Compress image and convert in char array
             CompressedText += LZWCompress(OriginalText);
             #endregion
 
-            #region decompression
+            #region Decompression
             // DECOMPRESSION
-            // decompress from code to image
-            //first data is width and height of the image, 3 digits
-            w = Convert.ToInt32(CompressedText.Substring(0, 3), 16);
-            h = Convert.ToInt32(CompressedText.Substring(3, 3), 16);
-
-            String decompress = LZWDecompress(CompressedText);
+            // Decompress from code to image
+            // First data is width and height of the image, 3 digits
+            _width = Convert.ToInt32(CompressedText.Substring(0, 3), 16);
+            _height = Convert.ToInt32(CompressedText.Substring(3, 3), 16);
+            _decompressedText = LZWDecompress(CompressedText);
             #endregion
 
-            #region reconstruct image
-            // render the image from decompressed data
+            #region Reconstruct image
+            // Render the image from decompressed data
             RenderDecompressedImage();
 
-            //Unlock
-            lockConverted.UnlockBits();
+            // Unlock
+            _lockConverted.UnlockBits();
             #endregion
 
-            // notify process
+            // Notify process
             Log("end - compression ratio: " + (int)(100 - 1f * CompressedText.Length / OriginalText.Length * 100) + " %, size " + CompressedText.Length + " chars ");
         }
 
-        public void UpdateAlpha(String c)
+        public void UpdateAlpha(string c)
         {
-            alpha = StringToColor(c);
+            _alpha = StringToColor(c);
         }
 
         public void AdaptToPalette()
         {
-            for (int i = 0; i < lockConverted.Width * lockConverted.Height; i++)
+            for (int i = 0; i < _lockConverted.Width * _lockConverted.Height; i++)
             {
-                int x = i % lockConverted.Width;
-                int y = i / lockConverted.Width;
-                lockConverted.SetPixel(x, y, ConverToPalette(lockConverted.GetPixel(x, y)));
+                int x = i % _lockConverted.Width;
+                int y = i / _lockConverted.Width;
+                _lockConverted.SetPixel(x, y, ConverToPalette(_lockConverted.GetPixel(x, y)));
 
-                // notify process                
+                // Notify process                
                 if (i % 1000 == 0)
                 {
-                    int percentage = (int)(100f * i / (lockConverted.Width * lockConverted.Height));
+                    int percentage = (int)(100f * i / (_lockConverted.Width * _lockConverted.Height));
                     Log("convert to palette... " + percentage + " %");
                 }
             }
@@ -159,14 +155,14 @@ namespace LZWConverter
 
         public void RenderDecompressedImage()
         {
-            DecompressedImage = new Bitmap(w, h);
+            DecompressedImage = new Bitmap(_width, _height);
             for (int i = 0; i < DecompressedImage.Width * DecompressedImage.Height; i++)
             {
-                int x = i % lockConverted.Width;
-                int y = i / lockConverted.Width;
-                DecompressedImage.SetPixel(x, y, StringToColor(OriginalText[i].ToString()));
+                int x = i % _lockConverted.Width;
+                int y = i / _lockConverted.Width;
+                DecompressedImage.SetPixel(x, y, StringToColor(_decompressedText[i].ToString()));
 
-                // notify process               
+                // Notify process               
                 if (i % 1000 == 0)
                 {
                     int percentage = (int)(100f * i / (DecompressedImage.Width * DecompressedImage.Height));
@@ -175,19 +171,16 @@ namespace LZWConverter
             }
         }
 
-        private void Log(String txt)
+        private void Log(string txt)
         {
-            if (LogEvent != null)
-            {
-                LogEvent(txt, EventArgs.Empty);
-            }
+            LogEvent?.Invoke(txt, EventArgs.Empty);
         }
 
-        private String LZWCompress(String txt)
+        private string LZWCompress(string txt)
         {
-            // initialize array
+            // Initialize array
             int indxDict = 15;
-            String[] dict = new String[DICT_SIZE];
+            string[] dict = new string[DICT_SIZE];
             dict[0] = "0";
             dict[1] = "1";
             dict[2] = "2";
@@ -205,56 +198,55 @@ namespace LZWConverter
             dict[14] = "e";
             dict[15] = "f";
 
-            // process lzw
+            // Process LZW
             StringBuilder output = new StringBuilder(txt.Length * 10);
-            char ch = ' ';
-            String s = "";
+            string s = "";
 
             for (int i = 0; i < txt.Length; i++)
             {
-                ch = txt[i];
+                char ch = txt[i];
 
-                if (FindString(dict, s + ch) >= 0)
+                if (Findstring(dict, s + ch) >= 0)
                 {
                     s += ch;
                 }
                 else
                 {
-                    output.AppendFormat(FORMAT, FindString(dict, s));
+                    output.AppendFormat(FORMAT, Findstring(dict, s));
                     dict[++indxDict] = s + ch;
                     s = "" + ch;
                 }
 
                 if (indxDict >= DICT_SIZE - 2)
                 {
-                    // flush dictionary
-                    output.AppendFormat(FORMAT, FindString(dict, s));
+                    // Flush dictionary
+                    output.AppendFormat(FORMAT, Findstring(dict, s));
                     output.AppendFormat(FORMAT, DICT_SIZE - 1);
                     s = "";
                     indxDict = 15;
                     for (int j = 16; j < dict.Length; j++) dict[j] = null;
                 }
 
-                // notify process
+                // Notify process
                 if (i % 1000 == 0)
                 {
                     int percentage = (int)(100f * i / txt.Length);
                     Log("compress data... " + percentage + " %");
                 }
             }
-            output.AppendFormat(FORMAT, FindString(dict, s));
+            output.AppendFormat(FORMAT, Findstring(dict, s));
 
             return output.ToString();
         }
 
-        private String LZWDecompress(String code)
+        private string LZWDecompress(string code)
         {
             if (code == null)
                 return null;
 
-            // initialize dictionary
+            // Initialize dictionary
             int indxDict = 15;
-            String[] dict = new String[DICT_SIZE];
+            string[] dict = new string[DICT_SIZE];
             dict[0] = "0";
             dict[1] = "1";
             dict[2] = "2";
@@ -272,22 +264,20 @@ namespace LZWConverter
             dict[14] = "e";
             dict[15] = "f";
 
-            // decompress data
-            int indxCode = 6; // first 6 chars are width and height of image
+            // Decompress data
+            int indxCode = 6; // First 6 chars are width and height of image
             StringBuilder output = new StringBuilder(code.Length * 10);
-            int prevCode = -1;
-            int currCode = -1;
-
-            prevCode = Convert.ToInt32(code.Substring(indxCode, FORMAT_SIZE), 16);
+            int prevCode = Convert.ToInt32(code.Substring(indxCode, FORMAT_SIZE), 16);
             indxCode += FORMAT_SIZE;
             output.Append(dict[prevCode]);
+
             while (indxCode < code.Length)
             {
-                currCode = Convert.ToInt32(code.Substring(indxCode, FORMAT_SIZE), 16);
+                int currCode = Convert.ToInt32(code.Substring(indxCode, FORMAT_SIZE), 16);
                 indxCode += FORMAT_SIZE;
                 if (currCode == DICT_SIZE - 1)
                 {
-                    // flush dictionary
+                    // Flush dictionary
                     indxDict = 15;
                     for (int j = 16; j < dict.Length; j++) dict[j] = null;
                     prevCode = Convert.ToInt32(code.Substring(indxCode, FORMAT_SIZE), 16);
@@ -307,7 +297,7 @@ namespace LZWConverter
                     prevCode = currCode;
                 }
 
-                // notify process                
+                // Notify process                
                 if (indxCode % 1000 == 0)
                 {
                     int percentage = (int)(100f * indxCode / code.Length);
@@ -317,7 +307,7 @@ namespace LZWConverter
             return output.ToString();
         }
 
-        private int FindString(String[] dict, String txt)
+        private int Findstring(string[] dict, string txt)
         {
             for (int i = 0; i < dict.Length; i++)
             {
@@ -340,7 +330,7 @@ namespace LZWConverter
             {
                 if (c.A != 255)
                 {
-                    return alpha;
+                    return _alpha;
                 }
                 else
                 {
@@ -363,19 +353,19 @@ namespace LZWConverter
             return (dr * dr + dg * dg + db * db);
         }
 
-        private String ColorToString(Color c)
+        private string ColorTostring(Color c)
         {
             for (int i = 0; i < Palette.Colors.Length; i++)
             {
                 if (c == Palette.Colors[i])
                 {
-                    return String.Format("{0:x1}", i);
+                    return string.Format("{0:x1}", i);
                 }
             }
             return "0";
         }
 
-        private Color StringToColor(String c)
+        private Color StringToColor(string c)
         {
             switch (c)
             {

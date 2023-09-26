@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LZWConverter
+﻿namespace LZWConverter
 {
     public static class TicCode
     {
-        #region decompression function
+        #region Decompression function
         public static string lwzdemoPre = @"
 local function LZWDecompress(txt)	
 	function InitDict()
@@ -38,7 +34,7 @@ local function LZWDecompress(txt)
 	
 	-- process
 	local out=''
-	local indxCode=7	-- first 6 chars are image width and heigth
+	local indxCode=7	-- first 6 chars are image width and height
 	local prevCode=-1
 	local currCode=-1
 	
@@ -83,17 +79,17 @@ end
 ";
         #endregion
 
-        #region compressed image
+        #region Compressed image
         public static string lwzdemoimgData = @"
 -- example
 
 -- compressed image data
 -- here is cut for a better visualization, copy from the compressed data to get entire image
-local comprImg = '{0}'
+local comprImg = ""{0}""
 ";
         #endregion
 
-        #region example in tic
+        #region Example in tic
         public static string lwzdemoPost = @"
 -- image information, composed by the sequence of color indexes and the dimensions of the image
 local img,w,h=LZWDecompress(comprImg)

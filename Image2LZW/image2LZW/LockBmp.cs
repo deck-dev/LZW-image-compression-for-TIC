@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace LZWConverter
 {
     public class LockBmp
     {
-        Bitmap source = null;
+        readonly Bitmap source = null;
         IntPtr Iptr = IntPtr.Zero;
         BitmapData bitmapData = null;
 
@@ -34,7 +32,7 @@ namespace LZWConverter
                 Width = source.Width;
                 Height = source.Height;
 
-                // get total locked pixels count
+                // Get total locked pixels count
                 int PixelCount = Width * Height;
 
                 // Create rectangle to lock
@@ -53,7 +51,7 @@ namespace LZWConverter
                 bitmapData = source.LockBits(rect, ImageLockMode.ReadWrite,
                                              source.PixelFormat);
 
-                // create byte array to copy pixel values
+                // Create byte array to copy pixel values
                 int step = Depth / 8;
                 Pixels = new byte[PixelCount * step];
                 Iptr = bitmapData.Scan0;

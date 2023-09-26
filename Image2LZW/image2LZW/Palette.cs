@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
+﻿using System.Drawing;
 
 namespace LZWConverter
 {
@@ -14,7 +11,7 @@ namespace LZWConverter
         {
             Name = name;
             Colors = new Color[16];
-            for(int i = 0; i < Colors.Length; i++)
+            for (int i = 0; i < Colors.Length; i++)
             {
                 Colors[i] = Color.Black;
             }
