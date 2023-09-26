@@ -36,10 +36,6 @@ namespace image2LZW.Scanner
             "while"
         };
 
-        public LuaScanner()
-        {
-        }
-
         public ICollection<LuaToken> Scan(string source)
         {
             _tokens = new List<LuaToken>();

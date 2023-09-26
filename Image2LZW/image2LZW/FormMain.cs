@@ -235,11 +235,11 @@ namespace LZWConverter
 
         private void RtbDemo_Layout(object sender, LayoutEventArgs e)
         {
-            // Update rendering of rich text box
+            // Scan the code to detect tokens
             var scanner = new LuaScanner();
             var tokens = scanner.Scan(rtbDemo.Text);
 
-            // Assign colors to code tokens
+            // Assign color to tokens
             foreach (var token in tokens)
             {
                 rtbDemo.Select(token.Start, token.Length);
