@@ -11,3 +11,7 @@ https://robertsspaceindustries.com/community/citizen-spotlight/969-Pixel-Citizen
 
 TIC80 is a tiny computer where you can make, play and share tiny games. Developed by Vadim Grigoruk
 https://tic80.com/
+
+![screenshot 1](https://postimg.cc/gxx9XV7H)
+![screenshot 2](https://postimg.cc/gxQCvwFF)
+
